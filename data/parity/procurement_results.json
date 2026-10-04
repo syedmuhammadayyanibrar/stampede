@@ -1,0 +1,117 @@
+{
+  "metrics": {
+    "G23_procurement_outperformance_vs_baseline": 0.3357,
+    "G24_allocation_regret_ratio": 0.0638,
+    "G25_downside_risk_containment": 1.0,
+    "G26_provider_concentration_limit": 0.4783,
+    "G27_numeric_grounding_accuracy": 1.0,
+    "G28_corrupted_csv_header_repair_rate": 1.0,
+    "G29_corrupted_csv_row_recovery_rate": 1.0
+  },
+  "optimization": {
+    "parity_allocations": [
+      {
+        "archetype": "code_generation",
+        "model": "anthropic/claude-3.5-sonnet",
+        "provider": "anthropic",
+        "volume_m": 50.0,
+        "unit_price": 4.0,
+        "gross_cost": 200.0,
+        "resale_recovery": 13.5,
+        "net_cost": 186.5
+      },
+      {
+        "archetype": "structured_extraction",
+        "model": "deepseek/deepseek-chat",
+        "provider": "deepseek",
+        "volume_m": 80.0,
+        "unit_price": 1.2,
+        "gross_cost": 96.0,
+        "resale_recovery": 6.48,
+        "net_cost": 89.52
+      },
+      {
+        "archetype": "reasoning_math",
+        "model": "openai/gpt-4o",
+        "provider": "openai",
+        "volume_m": 40.0,
+        "unit_price": 4.5,
+        "gross_cost": 180.0,
+        "resale_recovery": 12.15,
+        "net_cost": 167.85
+      },
+      {
+        "archetype": "translation",
+        "model": "anthropic/claude-3.5-sonnet",
+        "provider": "anthropic",
+        "volume_m": 60.0,
+        "unit_price": 4.0,
+        "gross_cost": 240.0,
+        "resale_recovery": 16.2,
+        "net_cost": 223.8
+      }
+    ],
+    "baseline_allocations": [
+      {
+        "archetype": "code_generation",
+        "model": "openai/gpt-4o",
+        "provider": "openai",
+        "volume_m": 50.0,
+        "unit_price": 4.5,
+        "gross_cost": 225.0,
+        "net_cost": 225.0
+      },
+      {
+        "archetype": "structured_extraction",
+        "model": "openai/gpt-4o",
+        "provider": "openai",
+        "volume_m": 80.0,
+        "unit_price": 4.5,
+        "gross_cost": 360.0,
+        "net_cost": 360.0
+      },
+      {
+        "archetype": "reasoning_math",
+        "model": "openai/gpt-4o",
+        "provider": "openai",
+        "volume_m": 40.0,
+        "unit_price": 4.5,
+        "gross_cost": 180.0,
+        "net_cost": 180.0
+      },
+      {
+        "archetype": "translation",
+        "model": "anthropic/claude-3.5-sonnet",
+        "provider": "anthropic",
+        "volume_m": 60.0,
+        "unit_price": 4.0,
+        "gross_cost": 240.0,
+        "net_cost": 240.0
+      }
+    ],
+    "total_parity_net_spend_usd": 667.67,
+    "total_baseline_spend_usd": 1005.0,
+    "cost_outperformance_pct": 0.3357,
+    "regret_ratio": 0.0638,
+    "spend_ceiling_compliant": 1.0,
+    "max_provider_share": 0.4783,
+    "spend_ceiling_usd": 1200.0
+  },
+  "grounding": {
+    "narrative": "Procurement analysis completed: baseline expenditure is $1005.00 compared to $667.67 under Parity optimal reservation. This achieves an outperformance of 33.57% while adhering to the $1200.00 spend ceiling. Maximum provider allocation is constrained to 47.83%.",
+    "evaluation": {
+      "is_grounded": true,
+      "accuracy": 1.0,
+      "total_numbers": 5,
+      "grounded_count": 5,
+      "unverified_numbers": []
+    }
+  },
+  "csv_corruption_evaluation": {
+    "header_repair_rate": 1.0,
+    "row_recovery_rate": 1.0,
+    "total_suites": 3,
+    "total_valid_rows": 64,
+    "total_recovered_rows": 64
+  }
+}
