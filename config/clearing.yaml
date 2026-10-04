@@ -1,0 +1,4 @@
+clearing_type: uniform_clearing
+platform_fee_bps: 25.0
+welfare_ratio_gate_min: 0.85
+holdout_wilson_confidence: 0.95

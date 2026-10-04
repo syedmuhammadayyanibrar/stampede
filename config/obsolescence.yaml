@@ -1,0 +1,13 @@
+min_clusters: 6
+bootstrap_samples: 1000
+hazard_models:
+  - exponential
+  - weibull
+calibration_providers:
+  - OpenAI
+  - Anthropic
+  - Google
+  - DeepSeek
+  - Meta
+  - Mistral
+walk_forward_train_ratio: 0.60

@@ -1,0 +1,6 @@
+target_utilization: 0.85
+cannibalization_dampener: 0.80
+capacity_tiers:
+  - 100.0
+  - 500.0
+  - 2000.0

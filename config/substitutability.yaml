@@ -1,0 +1,17 @@
+archetypes:
+  - code_generation
+  - structured_extraction
+  - summarization
+  - creative_writing
+  - reasoning_math
+  - rag_qa
+  - classification
+  - translation
+prior_alpha: 1.0
+prior_beta: 1.0
+margin_delta: 0.05
+decision_threshold: 0.95
+min_sample_size: 15
+max_sample_size: 60
+open_ended_pool_cap: 40
+wilson_confidence: 0.95

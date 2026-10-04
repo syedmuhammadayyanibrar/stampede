@@ -1,0 +1,5 @@
+dev_corruption_seed: 42
+test_corruption_seed: 1337
+grounding_relative_tolerance: 0.02
+budget_usd_cap: 50.00
+sub_cap_ceiling_check_usd: 4.00

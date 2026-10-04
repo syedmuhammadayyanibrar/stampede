@@ -1,0 +1,40 @@
+discount_rate: 0.04
+basis_polynomial_degree: 2
+lsm_paths: 5000
+panel_replications: 20
+risk_aversions:
+  - 0.0
+  - 0.1
+  - 0.25
+  - 0.5
+panel_cells:
+  - cell_id: cell_1_short_fresh
+    tenor_days: 30
+    age_days: 15
+    successor_active: false
+    depth_liquidity: 0.05
+    conversion_rate: 0.0
+  - cell_id: cell_2_mid_maturing
+    tenor_days: 90
+    age_days: 90
+    successor_active: false
+    depth_liquidity: 0.02
+    conversion_rate: 0.0
+  - cell_id: cell_3_shock_rollover
+    tenor_days: 90
+    age_days: 180
+    successor_active: true
+    depth_liquidity: 0.01
+    conversion_rate: 0.5
+  - cell_id: cell_4_long_frozen
+    tenor_days: 180
+    age_days: 240
+    successor_active: true
+    depth_liquidity: 0.005
+    conversion_rate: 0.0
+  - cell_id: cell_5_full_conversion
+    tenor_days: 90
+    age_days: 120
+    successor_active: true
+    depth_liquidity: 0.03
+    conversion_rate: 1.0
