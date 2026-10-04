@@ -69,7 +69,7 @@ def main():
     console.print(emp_table)
     console.print(
         f"[bold cyan]Mean Empirical 14-Day Switch Share (phi): {emp_dataset['mean_switch_share']:.1%}[/bold cyan] "
-        f"[dim](95% Bootstrap CI: [{emp_dataset['ci_95'][0]:.1%}, {emp_dataset['ci_95'][1]:.1%}], Half-Life ~ 11.2 Days)[/dim]"
+        f"[dim](95% Bootstrap CI: [{emp_dataset['ci_95'][0]:.1%}, {emp_dataset['ci_95'][1]:.1%}])[/dim]"
     )
     console.print()
     
@@ -381,8 +381,7 @@ def main():
         )
         f.write("## 1. Empirical Model Migration Velocity (OpenRouter 2025–2026)\n\n")
         f.write(f"- **Mean 14-Day Empirical Switch Share (phi):** **{emp_dataset['mean_switch_share']:.1%}** (95% Bootstrap CI: [{emp_dataset['ci_95'][0]:.1%}, {emp_dataset['ci_95'][1]:.1%}])\n")
-        f.write("- **Transition Half-Life:** **11.2 Days**\n")
-        f.write("- **Observed Generational Events:** 6 pairs (GPT-4o -> 4o-mini, Claude 3 Sonnet -> 3.5 Sonnet, Claude 3.5 Sonnet -> Haiku, Llama 3 -> 3.1 70B, Llama 3.1 -> 3.3 70B, DeepSeek V2.5 -> V3)\n\n")
+        f.write("- **Observed Generational Events:** 6 pairs (Claude 3.5 Sonnet -> Claude 3.7 Sonnet, Gemini Flash 1.5 -> Gemini Flash 2.0, Claude 3.7 Sonnet -> Claude 4 Sonnet, Gemini Flash 2.0 -> Gemini Flash 2.5, Claude 4 Sonnet -> Claude 4.5 Sonnet, DeepSeek V3 -> DeepSeek V4 Flash)\n\n")
         f.write("| Event | Provider | Transition | Launch Date | Pre-Launch Share | phi (14 Days) | phi (28 Days) |\n")
         f.write("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n")
         for ev in emp_dataset["events"]:

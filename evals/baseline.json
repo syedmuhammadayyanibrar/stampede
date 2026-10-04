@@ -3,6 +3,7 @@
   "plan_event_recall": 1.0,
   "plan_unverified_quote_rate": 0.0,
   "sizing_outperformance_pct": 4.45,
+  "sizing_outperformance_vs_mean_pct": 0.01,
   "grounding_guard_accuracy": 1.0,
   "overall_status": "PASS"
 }

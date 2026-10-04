@@ -22,15 +22,14 @@ Touchmark's resale promise is straightforward to keep when resale demand is **id
 
 ### A. Empirical Migration Velocity (OpenRouter 2025–2026)
 Rather than relying on arbitrary assumptions about model obsolescence, we extracted and analyzed **21+ months of daily model token rankings from OpenRouter** across 6 verified generational frontier transitions (Jan 2025 – Oct 2026):
-1. `GPT-4o -> GPT-4o-mini`
-2. `Claude 3 Sonnet -> Claude 3.5 Sonnet`
-3. `Claude 3.5 Sonnet -> Claude 3.5 Haiku`
-4. `Llama 3 70B -> Llama 3.1 70B`
-5. `Llama 3.1 70B -> Llama 3.3 70B`
-6. `DeepSeek V2.5 -> DeepSeek V3`
+1. `Claude 3.5 Sonnet -> Claude 3.7 Sonnet`
+2. `Gemini Flash 1.5 -> Gemini Flash 2.0`
+3. `Claude 3.7 Sonnet -> Claude 4 Sonnet`
+4. `Gemini Flash 2.0 -> Gemini Flash 2.5 Preview`
+5. `Claude 4 Sonnet -> Claude 4.5 Sonnet`
+6. `DeepSeek V3 -> DeepSeek V4 Flash`
 
 - **Mean 14-Day Empirical Switch Share ($\hat\phi$):** **58.0%** (95% Bootstrap CI: **[33.1%, 80.6%]**)
-- **Model Replacement Half-Life:** **11.2 Days**
 - **Empirical Validation:** This real-world migration velocity corroborates our baseline 60% switch share assumption with empirical developer traffic data.
 
 ### B. The Liquidity Crunch: Data-Driven vs. Assumed
@@ -49,7 +48,7 @@ When secondary market liquidity is modeled dynamically using the **square-root m
 In Touchmark Product Memo ([memo_conversion_option.md](memo_conversion_option.md)), we evaluate introducing a contractual upgrade conversion option allowing buyers to roll obsolete capacity into replacement frontier models at par value:
 - **0% Conversion Uptake:** Secondary spread is **35.8%**, Benchmark LCR is **4.77x**, shock penalty is **+$1.65/M**.
 - **50% Conversion Uptake:** Secondary spread compresses to **26.6%**, Benchmark LCR drops to **4.38x**.
-- **100% Conversion Uptake:** Secondary spread compresses to **13.9%**, Benchmark LCR drops to **3.88x**, dampening liquidation drag by **61.2%**.
+- **100% Conversion Uptake:** Secondary spread compresses to **13.9%**, Benchmark LCR drops to **3.88x**, achieving a **61.2% secondary spread compression** (reducing secondary spread from 35.8% to 13.9%).
 
 ---
 
@@ -162,7 +161,7 @@ stampede/
 │   ├── plans.py                   # Substring-verified strategic plan extractor
 │   ├── forecast.py                # 5,000-scenario log-drift Monte Carlo forecaster
 │   ├── sizing.py                  # Newsvendor optimizer & 70/30 protected ticket
-│   ├── fit_check.py               # Wilson CI task prompt suitability tester
+│   ├── fit_check.py               # Wilson CI prompt suitability heuristic (keyword-based filter; superseded by parity/substitutability)
 │   ├── explain.py                 # Grounded institutional narrative generator
 │   └── samples/                   # Sample CSVs (OpenAI, Anthropic, OpenRouter)
 ├── evals/

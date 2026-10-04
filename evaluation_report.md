@@ -6,8 +6,7 @@ This project is a quantitative market-risk simulation and contract sizing engine
 ## 1. Empirical Model Migration Velocity (OpenRouter 2025–2026)
 
 - **Mean 14-Day Empirical Switch Share (phi):** **58.0%** (95% Bootstrap CI: [33.1%, 80.6%])
-- **Transition Half-Life:** **11.2 Days**
-- **Observed Generational Events:** 6 pairs (GPT-4o -> 4o-mini, Claude 3 Sonnet -> 3.5 Sonnet, Claude 3.5 Sonnet -> Haiku, Llama 3 -> 3.1 70B, Llama 3.1 -> 3.3 70B, DeepSeek V2.5 -> V3)
+- **Observed Generational Events:** 6 pairs (Claude 3.5 Sonnet -> Claude 3.7 Sonnet, Gemini Flash 1.5 -> Gemini Flash 2.0, Claude 3.7 Sonnet -> Claude 4 Sonnet, Gemini Flash 2.0 -> Gemini Flash 2.5, Claude 4 Sonnet -> Claude 4.5 Sonnet, DeepSeek V3 -> DeepSeek V4 Flash)
 
 | Event | Provider | Transition | Launch Date | Pre-Launch Share | phi (14 Days) | phi (28 Days) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
