@@ -1,0 +1,79 @@
+{
+  "budget_usd_cap": 50.0,
+  "sub_cap_ceiling_usd": 4.0,
+  "cumulative_spend_usd": 0.000105,
+  "records": [
+    {
+      "call_id": "ceil_001",
+      "model": "openai/gpt-4o-mini",
+      "prompt_tokens": 16,
+      "completion_tokens": 3,
+      "cost_usd": 4e-06,
+      "total_after_usd": 4e-06,
+      "is_ceiling_check": true
+    },
+    {
+      "call_id": "ceil_002",
+      "model": "deepseek/deepseek-chat",
+      "prompt_tokens": 16,
+      "completion_tokens": 2,
+      "cost_usd": 3e-06,
+      "total_after_usd": 7e-06,
+      "is_ceiling_check": true
+    },
+    {
+      "call_id": "ceil_003",
+      "model": "openai/gpt-4o-mini",
+      "prompt_tokens": 34,
+      "completion_tokens": 2,
+      "cost_usd": 6e-06,
+      "total_after_usd": 1.3e-05,
+      "is_ceiling_check": true
+    },
+    {
+      "call_id": "ceil_001",
+      "model": "openai/gpt-4o-mini",
+      "prompt_tokens": 16,
+      "completion_tokens": 3,
+      "cost_usd": 4e-06,
+      "total_after_usd": 1.7e-05,
+      "is_ceiling_check": true
+    },
+    {
+      "call_id": "ceil_002",
+      "model": "deepseek/deepseek-chat",
+      "prompt_tokens": 16,
+      "completion_tokens": 2,
+      "cost_usd": 3e-06,
+      "total_after_usd": 2e-05,
+      "is_ceiling_check": true
+    },
+    {
+      "call_id": "ceil_003",
+      "model": "openai/gpt-4o-mini",
+      "prompt_tokens": 34,
+      "completion_tokens": 2,
+      "cost_usd": 6e-06,
+      "total_after_usd": 2.6e-05,
+      "is_ceiling_check": true
+    },
+    {
+      "call_id": "ceil_004",
+      "model": "google/gemini-2.5-flash-lite",
+      "prompt_tokens": 13,
+      "completion_tokens": 3,
+      "cost_usd": 6.3e-05,
+      "total_after_usd": 8.8e-05,
+      "is_ceiling_check": true
+    },
+    {
+      "call_id": "ceil_005",
+      "model": "openai/gpt-4o-mini",
+      "prompt_tokens": 35,
+      "completion_tokens": 20,
+      "cost_usd": 1.7e-05,
+      "total_after_usd": 0.000105,
+      "is_ceiling_check": true
+    }
+  ]
+}

@@ -1,0 +1,509 @@
+{
+  "matrix": {
+    "code_generation": {
+      "openai/gpt-4o": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.9525,
+        "trials_used": 28,
+        "posterior_theta_mean": 0.9333,
+        "effective_cost_per_m": 5.3571,
+        "holdout_theta": 1.0,
+        "holdout_wilson_ci": [
+          0.9124,
+          1.0
+        ]
+      },
+      "openai/gpt-4o-mini": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.393,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.8095,
+        "effective_cost_per_m": 0.3706,
+        "holdout_theta": 0.775,
+        "holdout_wilson_ci": [
+          0.625,
+          0.8768
+        ]
+      },
+      "anthropic/claude-3.5-sonnet": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.9525,
+        "trials_used": 28,
+        "posterior_theta_mean": 0.9333,
+        "effective_cost_per_m": 6.4286,
+        "holdout_theta": 0.95,
+        "holdout_wilson_ci": [
+          0.835,
+          0.9862
+        ]
+      },
+      "deepseek/deepseek-chat": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.365,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.881,
+        "effective_cost_per_m": 0.227,
+        "holdout_theta": 0.9,
+        "holdout_wilson_ci": [
+          0.7695,
+          0.9604
+        ]
+      },
+      "google/gemini-2.0-flash-001": {
+        "decision": "INFERIOR",
+        "p_non_inferior": 0.0415,
+        "trials_used": 16,
+        "posterior_theta_mean": 0.6111,
+        "effective_cost_per_m": 0.3273,
+        "holdout_theta": 0.8,
+        "holdout_wilson_ci": [
+          0.6524,
+          0.895
+        ]
+      }
+    },
+    "structured_extraction": {
+      "openai/gpt-4o": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.937,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9524,
+        "effective_cost_per_m": 5.25,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "openai/gpt-4o-mini": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.5055,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.8571,
+        "effective_cost_per_m": 0.35,
+        "holdout_theta": 0.9,
+        "holdout_wilson_ci": [
+          0.7695,
+          0.9604
+        ]
+      },
+      "anthropic/claude-3.5-sonnet": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.9605,
+        "trials_used": 28,
+        "posterior_theta_mean": 0.9667,
+        "effective_cost_per_m": 6.2069,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "deepseek/deepseek-chat": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.9585,
+        "trials_used": 17,
+        "posterior_theta_mean": 0.9474,
+        "effective_cost_per_m": 0.2111,
+        "holdout_theta": 0.975,
+        "holdout_wilson_ci": [
+          0.8712,
+          0.9956
+        ]
+      },
+      "google/gemini-2.0-flash-001": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.5315,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9048,
+        "effective_cost_per_m": 0.2211,
+        "holdout_theta": 0.875,
+        "holdout_wilson_ci": [
+          0.7389,
+          0.9454
+        ]
+      }
+    },
+    "summarization": {
+      "openai/gpt-4o": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.9695,
+        "trials_used": 22,
+        "posterior_theta_mean": 0.9167,
+        "effective_cost_per_m": 5.4545,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "openai/gpt-4o-mini": {
+        "decision": "INFERIOR",
+        "p_non_inferior": 0.0325,
+        "trials_used": 18,
+        "posterior_theta_mean": 0.7,
+        "effective_cost_per_m": 0.4286,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "anthropic/claude-3.5-sonnet": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.896,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9286,
+        "effective_cost_per_m": 6.4615,
+        "holdout_theta": 0.95,
+        "holdout_wilson_ci": [
+          0.835,
+          0.9862
+        ]
+      },
+      "deepseek/deepseek-chat": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.646,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.8571,
+        "effective_cost_per_m": 0.2333,
+        "holdout_theta": 0.85,
+        "holdout_wilson_ci": [
+          0.7093,
+          0.9294
+        ]
+      },
+      "google/gemini-2.0-flash-001": {
+        "decision": "INFERIOR",
+        "p_non_inferior": 0.036,
+        "trials_used": 34,
+        "posterior_theta_mean": 0.8056,
+        "effective_cost_per_m": 0.2483,
+        "holdout_theta": 0.9,
+        "holdout_wilson_ci": [
+          0.7695,
+          0.9604
+        ]
+      }
+    },
+    "creative_writing": {
+      "openai/gpt-4o": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.955,
+        "trials_used": 15,
+        "posterior_theta_mean": 0.9412,
+        "effective_cost_per_m": 5.3125,
+        "holdout_theta": 0.875,
+        "holdout_wilson_ci": [
+          0.7389,
+          0.9454
+        ]
+      },
+      "openai/gpt-4o-mini": {
+        "decision": "INFERIOR",
+        "p_non_inferior": 0.04,
+        "trials_used": 25,
+        "posterior_theta_mean": 0.7037,
+        "effective_cost_per_m": 0.4263,
+        "holdout_theta": 0.875,
+        "holdout_wilson_ci": [
+          0.7389,
+          0.9454
+        ]
+      },
+      "anthropic/claude-3.5-sonnet": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.968,
+        "trials_used": 19,
+        "posterior_theta_mean": 0.9048,
+        "effective_cost_per_m": 6.6316,
+        "holdout_theta": 0.95,
+        "holdout_wilson_ci": [
+          0.835,
+          0.9862
+        ]
+      },
+      "deepseek/deepseek-chat": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.5225,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.8333,
+        "effective_cost_per_m": 0.24,
+        "holdout_theta": 0.825,
+        "holdout_wilson_ci": [
+          0.6805,
+          0.9125
+        ]
+      },
+      "google/gemini-2.0-flash-001": {
+        "decision": "INFERIOR",
+        "p_non_inferior": 0.041,
+        "trials_used": 28,
+        "posterior_theta_mean": 0.7333,
+        "effective_cost_per_m": 0.2727,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      }
+    },
+    "reasoning_math": {
+      "openai/gpt-4o": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.7935,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9048,
+        "effective_cost_per_m": 5.5263,
+        "holdout_theta": 0.8,
+        "holdout_wilson_ci": [
+          0.6524,
+          0.895
+        ]
+      },
+      "openai/gpt-4o-mini": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.195,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.7857,
+        "effective_cost_per_m": 0.3818,
+        "holdout_theta": 0.65,
+        "holdout_wilson_ci": [
+          0.4951,
+          0.7787
+        ]
+      },
+      "anthropic/claude-3.5-sonnet": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.7515,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.881,
+        "effective_cost_per_m": 6.8108,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "deepseek/deepseek-chat": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.7935,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9048,
+        "effective_cost_per_m": 0.2211,
+        "holdout_theta": 0.775,
+        "holdout_wilson_ci": [
+          0.625,
+          0.8768
+        ]
+      },
+      "google/gemini-2.0-flash-001": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.137,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.7381,
+        "effective_cost_per_m": 0.271,
+        "holdout_theta": 0.75,
+        "holdout_wilson_ci": [
+          0.5981,
+          0.8581
+        ]
+      }
+    },
+    "rag_qa": {
+      "openai/gpt-4o": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.937,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9524,
+        "effective_cost_per_m": 5.25,
+        "holdout_theta": 0.95,
+        "holdout_wilson_ci": [
+          0.835,
+          0.9862
+        ]
+      },
+      "openai/gpt-4o-mini": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.172,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.8095,
+        "effective_cost_per_m": 0.3706,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "anthropic/claude-3.5-sonnet": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.6765,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9048,
+        "effective_cost_per_m": 6.6316,
+        "holdout_theta": 1.0,
+        "holdout_wilson_ci": [
+          0.9124,
+          1.0
+        ]
+      },
+      "deepseek/deepseek-chat": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.1835,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.881,
+        "effective_cost_per_m": 0.227,
+        "holdout_theta": 0.85,
+        "holdout_wilson_ci": [
+          0.7093,
+          0.9294
+        ]
+      },
+      "google/gemini-2.0-flash-001": {
+        "decision": "INFERIOR",
+        "p_non_inferior": 0.036,
+        "trials_used": 34,
+        "posterior_theta_mean": 0.8056,
+        "effective_cost_per_m": 0.2483,
+        "holdout_theta": 0.9,
+        "holdout_wilson_ci": [
+          0.7695,
+          0.9604
+        ]
+      }
+    },
+    "classification": {
+      "openai/gpt-4o": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.958,
+        "trials_used": 34,
+        "posterior_theta_mean": 0.9722,
+        "effective_cost_per_m": 5.1429,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "openai/gpt-4o-mini": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.655,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.881,
+        "effective_cost_per_m": 0.3405,
+        "holdout_theta": 0.95,
+        "holdout_wilson_ci": [
+          0.835,
+          0.9862
+        ]
+      },
+      "anthropic/claude-3.5-sonnet": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.8735,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9524,
+        "effective_cost_per_m": 6.3,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "deepseek/deepseek-chat": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.9605,
+        "trials_used": 28,
+        "posterior_theta_mean": 0.9667,
+        "effective_cost_per_m": 0.2069,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "google/gemini-2.0-flash-001": {
+        "decision": "NON_INFERIOR",
+        "p_non_inferior": 0.9555,
+        "trials_used": 30,
+        "posterior_theta_mean": 0.9688,
+        "effective_cost_per_m": 0.2065,
+        "holdout_theta": 0.9,
+        "holdout_wilson_ci": [
+          0.7695,
+          0.9604
+        ]
+      }
+    },
+    "translation": {
+      "openai/gpt-4o": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.937,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9524,
+        "effective_cost_per_m": 5.25,
+        "holdout_theta": 0.975,
+        "holdout_wilson_ci": [
+          0.8712,
+          0.9956
+        ]
+      },
+      "openai/gpt-4o-mini": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.365,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.881,
+        "effective_cost_per_m": 0.3405,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "anthropic/claude-3.5-sonnet": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.827,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9286,
+        "effective_cost_per_m": 6.4615,
+        "holdout_theta": 0.925,
+        "holdout_wilson_ci": [
+          0.8014,
+          0.9742
+        ]
+      },
+      "deepseek/deepseek-chat": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.7785,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9524,
+        "effective_cost_per_m": 0.21,
+        "holdout_theta": 0.875,
+        "holdout_wilson_ci": [
+          0.7389,
+          0.9454
+        ]
+      },
+      "google/gemini-2.0-flash-001": {
+        "decision": "INCONCLUSIVE",
+        "p_non_inferior": 0.708,
+        "trials_used": 40,
+        "posterior_theta_mean": 0.9286,
+        "effective_cost_per_m": 0.2154,
+        "holdout_theta": 0.95,
+        "holdout_wilson_ci": [
+          0.835,
+          0.9862
+        ]
+      }
+    }
+  },
+  "metrics": {
+    "G01_judge_accuracy_kappa": 0.88,
+    "G02_judge_swap_flip_rate": 0.04,
+    "G03_sequential_stopping_efficiency": 0.4317,
+    "G04_holdout_calibration_brier": 0.2602,
+    "G05_cost_ranking_monotonicity": 0.9343,
+    "G06_effective_cost_ratio_mae": 0.0097,
+    "G07_multi_turn_degradation_recall": 0.95
+  }
+}
