@@ -287,12 +287,26 @@ def main():
             "explanation": explanation
         }
         
+    parity_data = {}
+    for p_name, p_file in [
+        ("substitutability", "data/parity/substitutability_matrix.json"),
+        ("obsolescence", "data/parity/obsolescence_curves.json"),
+        ("valuation", "data/parity/valuation_curves.json"),
+        ("clearing", "data/parity/clearing_results.json"),
+        ("seller", "data/parity/seller_curves.json"),
+        ("procurement", "data/parity/procurement_results.json")
+    ]:
+        if os.path.exists(p_file):
+            with open(p_file, "r", encoding="utf-8") as pf:
+                parity_data[p_name] = json.load(pf)
+
     site_payload = {
         "models": models_dict,
         "headline_experiment": headline_data,
         "crunch_comparison": crunch_comparison,
         "empirical_migration": empirical_migration,
-        "copilot_presets": copilot_presets
+        "copilot_presets": copilot_presets,
+        "parity": parity_data
     }
     
     json_path = os.path.join("web", "data.json")

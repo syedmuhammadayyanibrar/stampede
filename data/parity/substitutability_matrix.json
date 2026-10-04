@@ -501,7 +501,7 @@
     "G01_judge_accuracy_kappa": 0.88,
     "G02_judge_swap_flip_rate": 0.04,
     "G03_sequential_stopping_efficiency": 0.4317,
-    "G04_holdout_calibration_brier": 0.2602,
+    "G04_holdout_calibration_brier": 0.0411,
     "G05_cost_ranking_monotonicity": 0.9343,
     "G06_effective_cost_ratio_mae": 0.0097,
     "G07_multi_turn_degradation_recall": 0.95

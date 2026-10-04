@@ -1,0 +1,77 @@
+{
+  "metrics": {
+    "G13_lsm_option_non_negativity": 1.0,
+    "G14_lsm_panel_stability_se": 0.000272,
+    "G15_early_exercise_monotonicity": 1.0,
+    "G16_shapley_efficiency_residual": 1.0,
+    "G17_shapley_symmetry_parity": 1.0,
+    "G18_zopa_existence_identification_rate": 1.0,
+    "G19_zopa_width_contraction_monotonicity": 1.0
+  },
+  "panel_results": [
+    {
+      "cell_id": "cell_1_short_fresh",
+      "tenor_days": 30,
+      "mean_option_value": 1.1734,
+      "standard_error": 0.000148
+    },
+    {
+      "cell_id": "cell_2_mid_maturing",
+      "tenor_days": 90,
+      "mean_option_value": 1.1735,
+      "standard_error": 0.000156
+    },
+    {
+      "cell_id": "cell_3_shock_rollover",
+      "tenor_days": 90,
+      "mean_option_value": 1.1911,
+      "standard_error": 0.000162
+    },
+    {
+      "cell_id": "cell_4_long_frozen",
+      "tenor_days": 180,
+      "mean_option_value": 1.1727,
+      "standard_error": 0.000197
+    },
+    {
+      "cell_id": "cell_5_full_conversion",
+      "tenor_days": 90,
+      "mean_option_value": 1.2099,
+      "standard_error": 0.000272
+    }
+  ],
+  "shapley": {
+    "total_required_discount": 1.411488,
+    "shapley_values": {
+      "drift": 0.36791,
+      "volatility": 0.041293,
+      "hazard": 0.872236,
+      "illiquidity": 0.13005
+    },
+    "sum_shapley": 1.411489,
+    "residual_efficiency": 9.2e-07,
+    "is_efficient": true,
+    "is_symmetric": true
+  },
+  "zopa": {
+    "risk_aversions": [
+      0.0,
+      0.1,
+      0.25,
+      0.5
+    ],
+    "buyer_valuations": [
+      4.2,
+      4.16,
+      4.1,
+      4.0
+    ],
+    "zopa_widths": [
+      1.7,
+      1.66,
+      1.6,
+      1.5
+    ],
+    "is_monotonically_contracting": true
+  }
+}

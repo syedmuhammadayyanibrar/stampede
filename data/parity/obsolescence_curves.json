@@ -1,0 +1,29 @@
+{
+  "metrics": {
+    "G08_hazard_brier_90d": 0.0772,
+    "G09_price_path_cone_coverage": 1.0,
+    "G10_successor_timing_mae_days": 8.21,
+    "G11_depreciation_ranking_spearman": 0.9189,
+    "G12_obsolescence_premium_monotonicity": 1.0,
+    "cluster_bootstrap_status": "PASS",
+    "distinct_providers": 6
+  },
+  "hazard_sweep": [
+    0.2,
+    0.6,
+    1.0,
+    1.85,
+    2.5
+  ],
+  "obsolescence_premiums": [
+    0.09182515022174442,
+    0.27012969353966465,
+    0.44153671163889374,
+    0.7840796095589262,
+    1.0273172044528014
+  ],
+  "bootstrap_ci": [
+    0.909090909090909,
+    1.1428571428571428
+  ]
+}
