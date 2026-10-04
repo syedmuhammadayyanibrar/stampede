@@ -1,0 +1,62 @@
+[
+  {
+    "id": "claude_35_to_37_sonnet",
+    "provider": "Anthropic",
+    "old_model_slug": "anthropic/claude-3.5-sonnet",
+    "new_model_slug": "anthropic/claude-3-7-sonnet-20250219",
+    "launch_date": "2025-02-24",
+    "old_price_in_out": [3.0, 15.0],
+    "new_price_in_out": [3.0, 15.0],
+    "source_notes": "Anthropic Claude 3.7 Sonnet launch"
+  },
+  {
+    "id": "gemini_flash_15_to_20",
+    "provider": "Google",
+    "old_model_slug": "google/gemini-flash-1.5",
+    "new_model_slug": "google/gemini-2.0-flash-001",
+    "launch_date": "2025-02-05",
+    "old_price_in_out": [0.075, 0.30],
+    "new_price_in_out": [0.10, 0.40],
+    "source_notes": "Google Gemini 2.0 Flash release"
+  },
+  {
+    "id": "claude_37_to_4_sonnet",
+    "provider": "Anthropic",
+    "old_model_slug": "anthropic/claude-3-7-sonnet-20250219",
+    "new_model_slug": "anthropic/claude-4-sonnet-20250522",
+    "launch_date": "2025-05-22",
+    "old_price_in_out": [3.0, 15.0],
+    "new_price_in_out": [3.0, 15.0],
+    "source_notes": "Anthropic Claude 4 Sonnet release"
+  },
+  {
+    "id": "gemini_flash_20_to_25",
+    "provider": "Google",
+    "old_model_slug": "google/gemini-2.0-flash-001",
+    "new_model_slug": "google/gemini-2.5-flash-preview-05-20",
+    "launch_date": "2025-05-20",
+    "old_price_in_out": [0.10, 0.40],
+    "new_price_in_out": [0.15, 0.60],
+    "source_notes": "Google Gemini 2.5 Flash release"
+  },
+  {
+    "id": "claude_4_to_45_sonnet",
+    "provider": "Anthropic",
+    "old_model_slug": "anthropic/claude-4-sonnet-20250522",
+    "new_model_slug": "anthropic/claude-4.5-sonnet-20250929",
+    "launch_date": "2025-09-29",
+    "old_price_in_out": [3.0, 15.0],
+    "new_price_in_out": [3.0, 15.0],
+    "source_notes": "Anthropic Claude 4.5 Sonnet release"
+  },
+  {
+    "id": "deepseek_v3_to_v4",
+    "provider": "DeepSeek",
+    "old_model_slug": "deepseek/deepseek-chat-v3-0324",
+    "new_model_slug": "deepseek/deepseek-v4-flash-20260423",
+    "launch_date": "2026-04-23",
+    "old_price_in_out": [0.14, 0.28],
+    "new_price_in_out": [0.14, 0.28],
+    "source_notes": "DeepSeek V4 Flash generational release"
+  }
+]

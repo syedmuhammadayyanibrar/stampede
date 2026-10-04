@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Touchmark | Forward AI Capacity Pricing & Liquidity Risk</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="chart.min.js"></script>
+  <script src="data.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="brand-name">Touchmark</span>
+        <span class="brand-tag">Risk Engineering & Copilot</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#about">Mechanism</a>
+        <a href="#contract-builder">Pricing Tool</a>
+        <a href="#copilot">Contract Copilot</a>
+        <a href="#empirical-migration">OpenRouter Migration</a>
+        <a href="#headline-finding">Liquidity Crunch</a>
+        <a href="#conversion-option">Upgrade Conversion</a>
+        <a href="#scenarios">Stress Tests</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-script">Forward.</div>
+          <h1 class="hero-title">Pricing inference capacity you haven't used yet.</h1>
+          <p class="hero-subtitle">Lock in future token capacity for frontier models at a fixed forward discount today, with the contractual flexibility to resell unutilized compute on the secondary market if production plans change.</p>
+          <div class="hero-actions">
+            <a href="#contract-builder" class="btn-pill btn-primary">Build a contract</a>
+            <a href="#copilot" class="btn-pill btn-secondary">Run Contract Copilot</a>
+            <a href="#headline-finding" class="btn-pill btn-secondary">Inspect crunch risk</a>
+          </div>
+        </div>
+        <div class="hero-graphic">
+          <svg class="line-art" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 40 320 C 120 310, 160 260, 220 250 C 270 240, 310 180, 380 160 C 420 150, 450 110, 480 90" stroke="#4A6163" stroke-width="2" stroke-linecap="round"/>
+            <path d="M 40 340 C 140 330, 200 300, 280 290 C 350 280, 400 240, 480 210" stroke="#F9A66C" stroke-width="1.75" stroke-dasharray="4 4"/>
+            <path d="M 220 250 L 220 310" stroke="#F17A7E" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="220" cy="250" r="4.5" fill="#F17A7E"/>
+            <circle cx="220" cy="310" r="4.5" fill="#F17A7E"/>
+            <line x1="80" y1="270" x2="80" y2="330" stroke="#4A6163" stroke-width="1" stroke-linecap="round"/>
+            <rect x="74" y="285" width="12" height="30" fill="#4A6163" rx="1"/>
+            <line x1="140" y1="240" x2="140" y2="300" stroke="#4A6163" stroke-width="1" stroke-linecap="round"/>
+            <rect x="134" y="255" width="12" height="25" fill="#4A6163" rx="1"/>
+            <line x1="300" y1="180" x2="300" y2="240" stroke="#4A6163" stroke-width="1" stroke-linecap="round"/>
+            <rect x="294" y="195" width="12" height="25" fill="#4A6163" rx="1"/>
+            <line x1="360" y1="130" x2="360" y2="190" stroke="#4A6163" stroke-width="1" stroke-linecap="round"/>
+            <rect x="354" y="145" width="12" height="30" fill="#4A6163" rx="1"/>
+            <circle cx="40" cy="320" r="4" fill="#4A6163"/>
+            <circle cx="380" cy="160" r="4" fill="#4A6163"/>
+            <circle cx="480" cy="90" r="5" fill="#4A6163"/>
+            <line x1="40" y1="360" x2="480" y2="360" stroke="#4A6163" stroke-width="1" stroke-opacity="0.3"/>
+            <line x1="40" y1="40" x2="40" y2="360" stroke="#4A6163" stroke-width="1" stroke-opacity="0.3"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about-section">
+      <div class="section-container">
+        <h2 class="reading-heading">Non-storable forward commitments for compute tokens.</h2>
+        <p class="reading-body">
+          Inference capacity cannot be warehoused in advance. When an engineering team enters a forward contract on Touchmark, they are locking in delivery of a guaranteed flow of tokens at a designated future date. Touchmark offsets deployment uncertainty by operating a secondary resale marketplace: if a team's production rollout is delayed or volume falls below forecast, surplus tokens can be liquidated back to other network buyers.
+        </p>
+      </div>
+    </section>
+
+    <section id="contract-builder" class="builder-section">
+      <div class="section-container">
+        <div class="builder-header">
+          <div class="eyebrow">CONTRACT BUILDER & PRICING ENGINE</div>
+          <h2 class="section-title">Fair forward valuation under continuous deflation.</h2>
+        </div>
+
+        <div class="builder-layout">
+          <div class="builder-controls">
+            <div class="form-row-2col">
+              <div class="form-group">
+                <label for="model-select">Underlying Model Family</label>
+                <select id="model-select" class="form-input">
+                  <option value="openai_gpt_tier">OpenAI GPT-4 / 4o Frontier Tier ($5.00 Spot)</option>
+                  <option value="anthropic_claude_tier">Anthropic Claude 3 / 3.5 Sonnet Tier ($3.00 Spot)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="tenor-select">Delivery Tenor</label>
+                <select id="tenor-select" class="form-input">
+                  <option value="30">30 Days (Short Tenor)</option>
+                  <option value="60">60 Days (Mid Tenor)</option>
+                  <option value="90" selected>90 Days (Quarterly Standard)</option>
+                  <option value="180">180 Days (Semi-Annual)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-2col">
+              <div class="form-group">
+                <label for="notional-input">Contract Notional (M Tokens)</label>
+                <input id="notional-input" type="number" class="form-input" value="100" min="1" max="10000" step="10">
+              </div>
+
+              <div class="form-group">
+                <label>Pricing Mode</label>
+                <div class="toggle-group">
+                  <button id="mode-fair" class="btn-toggle active" type="button">Model Fair Value</button>
+                  <button id="mode-touchmark" class="btn-toggle" type="button">15% Spot Discount</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="builder-summary">
+            <div class="price-display-card">
+              <div class="price-eyebrow" id="price-type-label">Computed Fair Forward Price</div>
+              <div class="price-value-container">
+                <span class="price-currency">$</span>
+                <span id="price-val" class="price-hero">3.62</span>
+                <span class="price-unit">/ M tokens</span>
+              </div>
+              <div class="price-detail-grid">
+                <div class="price-detail-item">
+                  <span class="detail-label">Inception Spot:</span>
+                  <strong id="spot-ref-val">$5.00 / M</strong>
+                </div>
+                <div class="price-detail-item">
+                  <span class="detail-label">Forward Discount:</span>
+                  <strong id="discount-pct-val" class="text-accent">-27.6%</strong>
+                </div>
+                <div class="price-detail-item">
+                  <span class="detail-label">Contract Total:</span>
+                  <strong id="notional-total-val">$362,000</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Simulated Spot Price Trajectories & Dispersion Bands</h3>
+              <p class="chart-subtitle">Jump-diffusion evolution across 10,000 paths accounting for hardware deflation and release jumps.</p>
+            </div>
+            <div class="chart-legend-custom">
+              <span class="legend-item"><span class="legend-swatch band"></span> 10th - 90th Band</span>
+              <span class="legend-item"><span class="legend-swatch median"></span> Median</span>
+              <span class="legend-item"><span class="legend-swatch sample"></span> Sample Paths</span>
+            </div>
+          </div>
+          <div class="canvas-wrapper">
+            <canvas id="fanChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="copilot" class="copilot-section">
+      <div class="section-container">
+        <div class="copilot-header">
+          <div class="eyebrow">CONTRACT COPILOT & SIZING ENGINE</div>
+          <h2 class="section-title">Automated buyer token sizing & risk structuring.</h2>
+          <p class="section-subtitle">Turn raw token consumption CSVs and planned engineering milestones into newsvendor-optimal contract tickets with 70/30 protected hedging.</p>
+        </div>
+
+        <div class="copilot-controls-card">
+          <div class="preset-selection-bar">
+            <span class="preset-label">Workload Preset:</span>
+            <button class="preset-btn active" data-preset="openai_tier">OpenAI Agents Fleet</button>
+            <button class="preset-btn" data-preset="anthropic_tier">Claude 3.5 Coding</button>
+            <button class="preset-btn" data-preset="openrouter_tier">OpenRouter Multi-Model</button>
+            <label class="btn-file-upload">
+              Upload CSV
+              <input type="file" id="copilot-file-input" accept=".csv" style="display: none;">
+            </label>
+          </div>
+
+          <div class="copilot-input-grid">
+            <div class="form-group">
+              <label for="copilot-plan-text">Forward Strategic Plans & Volume Guidance</label>
+              <input id="copilot-plan-text" class="form-input" type="text" value="Expanding European cluster deployment next month (+35% traffic) and optimizing prompt context caching in month 3 (-20% load).">
+            </div>
+            <div class="copilot-action-cell">
+              <button id="btn-run-copilot" class="btn-pill btn-primary">Recalculate Ticket</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="copilot-results-grid">
+          <div class="copilot-card">
+            <div class="card-eyebrow">HISTORICAL INGESTION SUMMARY</div>
+            <div class="stat-pills-row">
+              <div class="stat-pill">
+                <span class="pill-label">Observed History</span>
+                <strong id="copilot-days-val" class="pill-val">90 Days</strong>
+              </div>
+              <div class="stat-pill">
+                <span class="pill-label">Total Ingestion</span>
+                <strong id="copilot-tot-val" class="pill-val">1,248.5M</strong>
+              </div>
+              <div class="stat-pill">
+                <span class="pill-label">Mean Daily</span>
+                <strong id="copilot-mean-val" class="pill-val">13.87M / day</strong>
+              </div>
+              <div class="stat-pill">
+                <span class="pill-label">Daily Volatility</span>
+                <strong id="copilot-vol-val" class="pill-val">2.41M</strong>
+              </div>
+            </div>
+
+            <div class="plan-events-block">
+              <div class="plan-block-title">Extracted Milestone Events</div>
+              <div id="copilot-events-container" class="plan-events-list"></div>
+            </div>
+
+            <div class="fit-check-summary-block">
+              <div class="plan-block-title">Prompt Suitability Assessment (Wilson 95% CI)</div>
+              <div class="fit-ci-banner">
+                <span id="fit-rate-val" class="fit-ci-score">80.0%</span>
+                <span id="fit-ci-val" class="fit-ci-sub">95% CI: [37.6%, 96.4%]</span>
+                <span id="fit-savings-val" class="fit-ci-dollars">+$1.10 / M tokens saved</span>
+              </div>
+              <div id="fit-table-container" class="fit-table-wrapper"></div>
+            </div>
+          </div>
+
+          <div class="copilot-card">
+            <div class="card-eyebrow">OPTIMAL NEWSVENDOR CONTRACT TICKET</div>
+            <div class="ticket-hero-row">
+              <div>
+                <span class="ticket-sublabel">Optimal Forward Commitment (Q*)</span>
+                <div class="ticket-hero-val"><span id="copilot-qstar-val">1,412.5</span> <span class="ticket-unit">M Tokens</span></div>
+                <div class="ticket-heur-comp">vs. Naive Peak Sizing: <span id="copilot-qnaive-val">1,580.0M</span></div>
+              </div>
+              <div class="ticket-savings-box">
+                <span class="savings-tag">Projected Savings</span>
+                <div id="copilot-savings-val" class="savings-number">$1,935,125</div>
+                <div id="copilot-savings-pct" class="savings-pct-label">27.4% discount vs floating spot</div>
+              </div>
+            </div>
+
+            <div class="ticket-metrics-grid">
+              <div class="ticket-metric-cell">
+                <span class="metric-label">Forward Strike</span>
+                <strong id="copilot-strike-val">$3.63 / M</strong>
+              </div>
+              <div class="ticket-metric-cell">
+                <span class="metric-label">Critical Ratio (CR)</span>
+                <strong id="copilot-cr-val">0.513</strong>
+              </div>
+              <div class="ticket-metric-cell">
+                <span class="metric-label">Downside P95 Cost</span>
+                <strong id="copilot-p95-val">$5,820,100</strong>
+              </div>
+              <div class="ticket-metric-cell">
+                <span class="metric-label">Crunch Drag Risk</span>
+                <strong id="copilot-drag-val">$184,200</strong>
+              </div>
+            </div>
+
+            <div class="portfolio-structure-box">
+              <div class="portfolio-header">
+                <span class="portfolio-badge">Recommended Risk Allocation</span>
+                <strong id="portfolio-strat-name">70/30 Protected Core</strong>
+              </div>
+              <div class="portfolio-breakdown-row">
+                <div class="portfolio-slice">
+                  <span class="slice-label">Specific-Model Core (70%)</span>
+                  <strong id="portfolio-spec-val" class="slice-val">988.8M Tokens</strong>
+                  <span class="slice-note">Lowest forward strike price</span>
+                </div>
+                <div class="portfolio-slice">
+                  <span class="slice-label">Best-in-Class Hedge (30%)</span>
+                  <strong id="portfolio-bic-val" class="slice-val">423.8M Tokens</strong>
+                  <span class="slice-note">Eliminates obsolescence replacement risk</span>
+                </div>
+              </div>
+              <p id="portfolio-rationale-text" class="portfolio-rationale">30% best-in-class allocation eliminates replacement risk on core agent workloads, while staggered 30-day tenors prevent concentrated 90-day obsolescence exposure.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Demand Forecast Monte Carlo Simulation (90-Day Horizon)</h3>
+              <p class="chart-subtitle">Log-linear drift estimation with residual bootstrapping and strategic plan multipliers across 4,000 scenario paths.</p>
+            </div>
+            <div class="chart-legend-custom">
+              <span class="legend-item"><span class="legend-swatch band"></span> P10 - P90 Scenario Fan</span>
+              <span class="legend-item"><span class="legend-swatch median"></span> Median Forecast</span>
+            </div>
+          </div>
+          <div class="canvas-wrapper">
+            <canvas id="copilotForecastChart"></canvas>
+          </div>
+        </div>
+
+        <div class="commentary-card">
+          <div class="commentary-header">
+            <span class="commentary-badge">AUDITED COPILOT EXECUTIVE SUMMARY</span>
+            <span class="grounding-status-tag">Grounded & Verified</span>
+          </div>
+          <p id="copilot-explanation-text" class="commentary-body"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="empirical-migration" class="migration-section">
+      <div class="section-container">
+        <div class="migration-header">
+          <div class="eyebrow">EMPIRICAL MIGRATION VELOCITY</div>
+          <h2 class="section-title">Verified developer model switching behavior.</h2>
+          <p class="section-subtitle">Evaluating 21+ months of daily model traffic from OpenRouter across 6 generational frontier launches (2025–2026).</p>
+        </div>
+
+        <div class="migration-stats-strip">
+          <div class="migration-stat-box">
+            <span class="mstat-label">14-Day Empirical Switch Share (phi)</span>
+            <div class="mstat-hero text-teal">58.0%</div>
+            <span class="mstat-sub">95% Bootstrap CI: [33.1%, 80.6%]</span>
+          </div>
+          <div class="migration-stat-box">
+            <span class="mstat-label">Replacement Half-Life</span>
+            <div class="mstat-hero text-orange">11.2 Days</div>
+            <span class="mstat-sub">From launch date to 50% traffic shift</span>
+          </div>
+          <div class="migration-stat-box">
+            <span class="mstat-label">Observed Generational Events</span>
+            <div class="mstat-hero">6 Pairs</div>
+            <span class="mstat-sub">OpenAI, Anthropic, Meta, DeepSeek</span>
+          </div>
+          <div class="migration-stat-box">
+            <span class="mstat-label">Data Grounding Source</span>
+            <div class="mstat-hero text-coral">OpenRouter</div>
+            <span class="mstat-sub">openrouter.ai/api/v1/datasets/rankings-daily</span>
+          </div>
+        </div>
+
+        <div class="migration-chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Token Share Migration Curve Around Frontier Launches</h3>
+              <p class="chart-subtitle">Relative timeline: Day -14 (pre-launch benchmark) to Day +28 (post-launch adoption).</p>
+            </div>
+            <div class="migration-controls">
+              <select id="migration-event-select" class="form-input">
+                <option value="mean_all">Mean Empirical Trajectory (All 6 Events)</option>
+              </select>
+            </div>
+          </div>
+          <div class="canvas-wrapper">
+            <canvas id="migrationChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="headline-finding" class="crunch-hero-section">
+      <div class="section-container">
+        <div class="crunch-header">
+          <div class="crunch-eyebrow">THE HEADLINE FINDING</div>
+          <h2 class="crunch-section-title">The Secondary Liquidity Crunch</h2>
+          <p class="crunch-lead-in">When a new frontier model launches, resale demand ceases to be idiosyncratic. Touchmark's secondary market undergoes a correlated sell-off as buyers rush to dump deprecated contracts simultaneously.</p>
+        </div>
+
+        <div class="crunch-display">
+          <div class="crunch-stat-hero">
+            <div class="stat-number-wrapper">
+              <span id="lcr-val" class="huge-crunch-number">11.1</span>
+              <span class="huge-crunch-unit">x</span>
+            </div>
+            <div class="crunch-stat-title">Benchmark Liquidity Crunch Ratio</div>
+            <div id="lcr-ci-text" class="crunch-stat-ci">95% Bootstrap CI: [10.4x, 11.8x]</div>
+            <p class="crunch-stat-caption">Relative to unshocked counterfactual benchmark value, realized resale discounts widen by over 11 times during shock windows. (Microstructural order book spreads expand by <strong>6.34x</strong>, from 6.0% to 38.0%).</p>
+          </div>
+
+          <div class="crunch-visual-panel">
+            <div class="visual-card">
+              <h3 class="visual-title">Secondary Market Execution Comparison</h3>
+              <p class="visual-subtitle">Average realized resale price and market-maker half-spread under normal conditions versus a correlated obsolescence shock.</p>
+              
+              <div class="comparison-bars">
+                <div class="comparison-item">
+                  <div class="comp-label-row">
+                    <span class="comp-name">Normal Idiosyncratic Resale</span>
+                    <span id="p-norm-val" class="comp-price">$3.63 / M tokens</span>
+                  </div>
+                  <div class="bar-track">
+                    <div id="bar-norm" class="bar-fill norm" style="width: 94%;"></div>
+                  </div>
+                  <div class="comp-subtext">Order book spread: <strong id="spread-norm-val">6.0%</strong> (Market makers absorb staggered volume)</div>
+                </div>
+
+                <div class="comparison-item">
+                  <div class="comp-label-row">
+                    <span class="comp-name">Correlated Obsolescence Shock</span>
+                    <span id="p-shock-val" class="comp-price text-coral">$1.29 / M tokens</span>
+                  </div>
+                  <div class="bar-track">
+                    <div id="bar-shock" class="bar-fill shock" style="width: 33%;"></div>
+                  </div>
+                  <div class="comp-subtext">Order book spread: <strong id="spread-shock-val" class="text-coral">38.0%</strong> (Liquidity withdrawal during mass exit)</div>
+                </div>
+              </div>
+
+              <div class="buyer-bottomline-card">
+                <div class="bottomline-title">Economic Risk Decomposition (In Shock Window)</div>
+                <div class="bottomline-grid">
+                  <div>
+                    <span class="bottomline-metric-label">Fair Forward F0 Cost</span>
+                    <div id="cost-fwd-val" class="bottomline-val text-coral">$3.26 / M</div>
+                  </div>
+                  <div>
+                    <span class="bottomline-metric-label">Spot On-Demand Cost</span>
+                    <div id="cost-spot-val" class="bottomline-val text-teal">$1.46 / M</div>
+                  </div>
+                  <div>
+                    <span class="bottomline-metric-label">Shock Window Penalty</span>
+                    <div id="cost-penalty-val" class="bottomline-val text-coral">+122.6% (+$1.80/M)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crunch-comparison-block">
+          <h3 class="comparison-section-title">Data-Driven vs. Assumed Crunch Comparison</h3>
+          <p class="comparison-section-subtitle">Evaluating whether the liquidity crunch is an artifact of an assumed 38% spread or a structural consequence of empirical migration velocity.</p>
+          <div class="comparison-table-wrap">
+            <table class="cmp-table">
+              <thead>
+                <tr>
+                  <th>Methodological Parameter</th>
+                  <th>Assumed Benchmark Baseline</th>
+                  <th>Empirical Data-Driven (OpenRouter + Impact Law)</th>
+                  <th>Structural Finding</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Secondary Market Spread</strong></td>
+                  <td>38.0% (Assumed fixed)</td>
+                  <td><strong>35.8%</strong> (Square-root impact calibrated)</td>
+                  <td>Corroborates assumed magnitude</td>
+                </tr>
+                <tr>
+                  <td><strong>Liquidity Crunch Ratio (LCR)</strong></td>
+                  <td>11.10x (95% CI: [10.43, 11.84])</td>
+                  <td><strong>4.77x</strong> (95% CI: [4.63, 4.91])</td>
+                  <td>Crunch naturally emerges from real velocity</td>
+                </tr>
+                <tr>
+                  <td><strong>Shock Cost Penalty</strong></td>
+                  <td>+$1.67 / M tokens</td>
+                  <td><strong>+$1.65 / M tokens</strong></td>
+                  <td>Robust net economic buyer penalty</td>
+                </tr>
+                <tr>
+                  <td><strong>Mean Resale Price in Shock</strong></td>
+                  <td>$1.81 / M tokens</td>
+                  <td><strong>$1.88 / M tokens</strong></td>
+                  <td>Substantial liquidation discount confirmed</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="narrative-editorial-block">
+          <div class="editorial-badge">EXECUTIVE RISK ASSESSMENT</div>
+          <p id="narrative-headline" class="editorial-p bold"></p>
+          <p id="narrative-economic" class="editorial-p"></p>
+        </div>
+
+        <div class="framing-disclaimer">
+          <strong>Methodological Framing:</strong> Calibrated to OpenRouter daily rankings data and square-root market impact laws. It evaluates market behavior under documented assumptions; it does not claim to reflect Touchmark's internal live order book.
+        </div>
+      </div>
+    </section>
+
+    <section id="conversion-option" class="conversion-section">
+      <div class="section-container">
+        <div class="conversion-header">
+          <div class="eyebrow">CONTRACTUAL RISK MITIGATION</div>
+          <h2 class="section-title">The Upgrade Conversion Option: Compressing secondary spreads.</h2>
+          <p class="section-subtitle">Providing forward buyers with contractual upgrade conversion into replacement models at par value dampens panic resale and stabilizes secondary liquidity.</p>
+        </div>
+
+        <div class="conversion-slider-card">
+          <div class="slider-control-row">
+            <label for="conversion-slider">Conversion Option Uptake Rate (c): <strong id="conversion-rate-display" class="text-orange">0%</strong></label>
+            <input type="range" id="conversion-slider" min="0" max="100" step="25" value="0" class="styled-slider">
+          </div>
+
+          <div class="conversion-stat-grid">
+            <div class="conversion-stat-box">
+              <span class="cstat-label">Effective Secondary Spread</span>
+              <div id="c-spread-val" class="cstat-hero text-coral">35.8%</div>
+              <span class="cstat-sub">Order book liquidation spread</span>
+            </div>
+            <div class="conversion-stat-box">
+              <span class="cstat-label">Liquidity Crunch Ratio</span>
+              <div id="c-lcr-val" class="cstat-hero text-coral">4.77x</div>
+              <span class="cstat-sub">Relative resale discount</span>
+            </div>
+            <div class="conversion-stat-box">
+              <span class="cstat-label">Realized Resale Price</span>
+              <div id="c-resale-val" class="cstat-hero text-teal">$1.88 / M</div>
+              <span class="cstat-sub">Salvage value during obsolescence</span>
+            </div>
+            <div class="conversion-stat-box">
+              <span class="cstat-label">Net Shock Penalty</span>
+              <div id="c-penalty-val" class="cstat-hero text-coral">+$1.65 / M</div>
+              <span class="cstat-sub">Cost increase over spot floating</span>
+            </div>
+          </div>
+
+          <div class="conversion-memo-callout">
+            <strong>Institutional Insight:</strong> As documented in Touchmark Product Memo (<a href="memo_conversion_option.md" target="_blank" class="text-accent underline">memo_conversion_option.md</a>), achieving 75%+ conversion uptake compresses secondary market spreads below 20.0% and dampens net shock penalties by <strong>61.2%</strong>. This transforms obsolescence risk from a catastrophic liquidation into an orderly contract rollover.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scenarios" class="scenarios-section">
+      <div class="section-container">
+        <div class="scenarios-header">
+          <div class="eyebrow">SUPPORTING CONTEXT</div>
+          <h2 class="section-title">Stress Scenarios</h2>
+          <p class="section-subtitle">Targeted boundary tests to contextualize secondary market vulnerability without distracting from the headline finding.</p>
+        </div>
+
+        <div class="scenarios-grid">
+          <div class="scenario-card">
+            <div class="scenario-pill">Stress 1</div>
+            <h3 class="scenario-title">Secondary Market Freeze</h3>
+            <div class="scenario-metric">
+              <span class="metric-big text-coral">13.1x</span>
+              <span class="metric-sub">Benchmark LCR</span>
+            </div>
+            <p class="scenario-desc">Market maker spreads blow out to 65.0% as bids withdraw entirely during a panic obsolescence event.</p>
+            <div class="scenario-footer">Shock forward penalty: <strong>+$1.93 / M tokens</strong></div>
+          </div>
+
+          <div class="scenario-card">
+            <div class="scenario-pill">Stress 2</div>
+            <h3 class="scenario-title">Buyer Utilization Collapse</h3>
+            <div class="scenario-metric">
+              <span class="metric-big text-coral">+520.7%</span>
+              <span class="metric-sub">Shock Penalty</span>
+            </div>
+            <p class="scenario-desc">Internal project delays cause the buyer to consume only 20% of capacity, dumping 80% of volume into secondary resale.</p>
+            <div class="scenario-footer">Shock forward cost: <strong>$2.61 / M tokens</strong></div>
+          </div>
+
+          <div class="scenario-card">
+            <div class="scenario-pill">Stress 3</div>
+            <h3 class="scenario-title">Frontier Release War</h3>
+            <div class="scenario-metric">
+              <span class="metric-big text-orange">3.70 / yr</span>
+              <span class="metric-sub">Hazard Rate</span>
+            </div>
+            <p class="scenario-desc">Accelerated frontier lab competition cuts expected model tenure in half, elevating shock probability to 13.1%.</p>
+            <div class="scenario-footer">Shock forward penalty: <strong>+$2.11 / M tokens</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <div class="footer-brand">Touchmark Market Risk Simulation & Contract Copilot</div>
+        <p class="footer-note">Complete quantitative evaluation data—including empirical OpenRouter migration curves, Monte Carlo convergence checks, parameter sensitivities, bootstrap intervals, and calibration tables—is output separately via the CLI evaluation harness (<code>python cli_report.py</code>), the evaluation suite (<code>python run_evals.py</code>), and preserved in <code>evaluation_report.md</code>.</p>
+      </div>
+      <div class="footer-right">
+        <p class="footer-disclaimer">Academic & Engineering Risk Simulation &bull; Not Touchmark Proprietary Data</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

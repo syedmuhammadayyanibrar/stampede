@@ -1,0 +1,8 @@
+{
+  "csv_parser_accuracy": 1.0,
+  "plan_event_recall": 1.0,
+  "plan_unverified_quote_rate": 0.0,
+  "sizing_outperformance_pct": 4.45,
+  "grounding_guard_accuracy": 1.0,
+  "overall_status": "PASS"
+}

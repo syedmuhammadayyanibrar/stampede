@@ -1,0 +1,14 @@
+csv_parser:
+  exact_mapping_accuracy_min: 1.0
+  bad_file_rejection_rate_min: 1.0
+plan_extractor:
+  event_recall_min: 0.80
+  unverified_quote_rate_max: 0.02
+fit_check:
+  wilson_ci_spread_max: 0.35
+  savings_yield_min: 0.10
+sizing_optimization:
+  outperformance_vs_naive_min_pct: 3.0
+grounding_guard:
+  valid_pass_rate_min: 1.0
+  invalid_rejection_rate_min: 1.0

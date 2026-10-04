@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+ai_cache/
+data/openrouter_cache/
+data/cache/
+.pytest_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+scratch/
