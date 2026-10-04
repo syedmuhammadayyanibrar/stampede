@@ -1,0 +1,19 @@
+{
+  "metrics": {
+    "G20_clearing_envy_freeness_rate": 1.0,
+    "G21_market_welfare_uplift_ratio": 4.0064,
+    "isolated_welfare_usd": 411.56,
+    "substitutability_welfare_usd": 1648.88,
+    "welfare_uplift_pct": 300.64
+  },
+  "isolated_clearing": {
+    "total_welfare": 411.565,
+    "traded_volume_m": 164.5,
+    "num_matches": 9
+  },
+  "substitutability_clearing": {
+    "total_welfare": 1648.876,
+    "traded_volume_m": 529.5,
+    "num_matches": 31
+  }
+}
