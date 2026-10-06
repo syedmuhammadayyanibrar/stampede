@@ -1,9 +1,10 @@
 {
   "verified_hash_status": "LOCKED_VALID",
   "total_gates": 30,
-  "passed_gates": 30,
+  "passed_gates": 26,
   "failed_gates": 0,
-  "duration_seconds": 0.0568,
+  "skipped_gates": 4,
+  "duration_seconds": 0.049,
   "gates": [
     {
       "gate_id": "G01",
@@ -12,7 +13,8 @@
       "target_direction": "ge",
       "threshold": 0.7,
       "unit": "score",
-      "observed_value": 0.88,
+      "value": 0.8142,
+      "observed_value": 0.8142,
       "status": "PASS",
       "ci_95": null
     },
@@ -23,7 +25,8 @@
       "target_direction": "le",
       "threshold": 0.1,
       "unit": "rate",
-      "observed_value": 0.04,
+      "value": 0.0299,
+      "observed_value": 0.0299,
       "status": "PASS",
       "ci_95": null
     },
@@ -34,7 +37,8 @@
       "target_direction": "ge",
       "threshold": 0.25,
       "unit": "ratio",
-      "observed_value": 0.4317,
+      "value": 0.3788,
+      "observed_value": 0.3788,
       "status": "PASS",
       "ci_95": null
     },
@@ -45,7 +49,8 @@
       "target_direction": "le",
       "threshold": 0.15,
       "unit": "score",
-      "observed_value": 0.0411,
+      "value": 0.0572,
+      "observed_value": 0.0572,
       "status": "PASS",
       "ci_95": null
     },
@@ -56,7 +61,8 @@
       "target_direction": "ge",
       "threshold": 0.85,
       "unit": "correlation",
-      "observed_value": 0.9343,
+      "value": 0.9593,
+      "observed_value": 0.9593,
       "status": "PASS",
       "ci_95": null
     },
@@ -67,7 +73,8 @@
       "target_direction": "le",
       "threshold": 0.08,
       "unit": "error",
-      "observed_value": 0.0097,
+      "value": 0.0083,
+      "observed_value": 0.0083,
       "status": "PASS",
       "ci_95": null
     },
@@ -78,6 +85,7 @@
       "target_direction": "ge",
       "threshold": 0.8,
       "unit": "rate",
+      "value": 0.95,
       "observed_value": 0.95,
       "status": "PASS",
       "ci_95": null
@@ -89,8 +97,9 @@
       "target_direction": "le",
       "threshold": 0.18,
       "unit": "score",
+      "value": 0.0772,
       "observed_value": 0.0772,
-      "status": "PASS",
+      "status": "SKIPPED(insufficient_data)",
       "ci_95": null
     },
     {
@@ -100,8 +109,9 @@
       "target_direction": "ge",
       "threshold": 0.8,
       "unit": "rate",
+      "value": 1.0,
       "observed_value": 1.0,
-      "status": "PASS",
+      "status": "SKIPPED(insufficient_data)",
       "ci_95": null
     },
     {
@@ -111,8 +121,9 @@
       "target_direction": "le",
       "threshold": 45.0,
       "unit": "days",
+      "value": 8.21,
       "observed_value": 8.21,
-      "status": "PASS",
+      "status": "SKIPPED(insufficient_data)",
       "ci_95": null
     },
     {
@@ -122,8 +133,9 @@
       "target_direction": "ge",
       "threshold": 0.7,
       "unit": "correlation",
+      "value": 0.9189,
       "observed_value": 0.9189,
-      "status": "PASS",
+      "status": "SKIPPED(insufficient_data)",
       "ci_95": null
     },
     {
@@ -133,6 +145,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -144,6 +157,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -155,6 +169,7 @@
       "target_direction": "le",
       "threshold": 0.02,
       "unit": "dollars_per_m",
+      "value": 0.0003,
       "observed_value": 0.0003,
       "status": "PASS",
       "ci_95": null
@@ -166,6 +181,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -177,6 +193,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -188,6 +205,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -199,6 +217,7 @@
       "target_direction": "ge",
       "threshold": 0.9,
       "unit": "rate",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -210,6 +229,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -221,6 +241,7 @@
       "target_direction": "ge",
       "threshold": 0.95,
       "unit": "rate",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -232,7 +253,8 @@
       "target_direction": "ge",
       "threshold": 1.08,
       "unit": "ratio",
-      "observed_value": 4.0064,
+      "value": 1.1809,
+      "observed_value": 1.1809,
       "status": "PASS",
       "ci_95": null
     },
@@ -243,6 +265,7 @@
       "target_direction": "ge",
       "threshold": 0.2,
       "unit": "ratio",
+      "value": 0.45,
       "observed_value": 0.45,
       "status": "PASS",
       "ci_95": null
@@ -254,7 +277,8 @@
       "target_direction": "ge",
       "threshold": 0.05,
       "unit": "ratio",
-      "observed_value": 0.3357,
+      "value": 0.093,
+      "observed_value": 0.093,
       "status": "PASS",
       "ci_95": null
     },
@@ -265,6 +289,7 @@
       "target_direction": "le",
       "threshold": 0.08,
       "unit": "ratio",
+      "value": 0.0638,
       "observed_value": 0.0638,
       "status": "PASS",
       "ci_95": null
@@ -276,6 +301,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -287,6 +313,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -298,6 +325,7 @@
       "target_direction": "ge",
       "threshold": 1.0,
       "unit": "binary",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -309,6 +337,7 @@
       "target_direction": "ge",
       "threshold": 0.9,
       "unit": "rate",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -320,6 +349,7 @@
       "target_direction": "ge",
       "threshold": 0.85,
       "unit": "rate",
+      "value": 1.0,
       "observed_value": 1.0,
       "status": "PASS",
       "ci_95": null
@@ -331,7 +361,8 @@
       "target_direction": "le",
       "threshold": 120.0,
       "unit": "seconds",
-      "observed_value": 0.0568,
+      "value": 0.049,
+      "observed_value": 0.049,
       "status": "PASS",
       "ci_95": null
     }

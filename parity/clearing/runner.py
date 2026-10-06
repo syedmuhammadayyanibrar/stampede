@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Dict, List, Any
 import numpy as np
 from parity.clearing.auction import AuctionBid, AuctionAsk, clear_resale_market
+from parity.clearing.mechanisms import run_paired_seeds_clearing
 from parity.io import read_json, write_json_atomic
 
 def generate_synthetic_auction_orderbook(
@@ -9,14 +10,14 @@ def generate_synthetic_auction_orderbook(
 ) -> tuple[List[AuctionBid], List[AuctionAsk]]:
     rng = np.random.default_rng(seed)
     archetypes = [
-        "code_generation",
-        "structured_extraction",
+        "json_extraction",
+        "text_to_sql",
+        "arithmetic_reasoning",
+        "ticket_classification",
+        "constraint_rewrite",
+        "grounded_qa",
         "summarization",
-        "creative_writing",
-        "reasoning_math",
-        "rag_qa",
-        "classification",
-        "translation"
+        "support_reply"
     ]
     models = [
         "openai/gpt-4o",
@@ -60,7 +61,8 @@ def generate_synthetic_auction_orderbook(
 def run_clearing_module(
     matrix_path: Path = Path("data/parity/substitutability_matrix.json"),
     output_path: Path = Path("data/parity/clearing_results.json"),
-    seed: int = 42
+    seed: int = 42,
+    num_paired_seeds: int = 50
 ) -> Dict[str, Any]:
     matrix_data = read_json(matrix_path)
     sub_matrix = matrix_data.get("matrix", {})
@@ -81,31 +83,33 @@ def run_clearing_module(
         use_substitutability=True
     )
 
-    w_iso = max(1.0, isolated_res["total_welfare"])
-    w_sub = substitutability_res["total_welfare"]
-    welfare_ratio = float(w_sub / w_iso)
+    paired_eval = run_paired_seeds_clearing(num_seeds=num_paired_seeds, base_seed=seed)
 
     envy_free_rate = substitutability_res["envy_free_rate"]
+    welfare_ratio = paired_eval["welfare_ratio_vs_same_model_only"]
 
     metrics = {
         "G20_clearing_envy_freeness_rate": round(envy_free_rate, 4),
         "G21_market_welfare_uplift_ratio": round(welfare_ratio, 4),
-        "isolated_welfare_usd": round(w_iso, 2),
-        "substitutability_welfare_usd": round(w_sub, 2),
-        "welfare_uplift_pct": round((welfare_ratio - 1.0) * 100.0, 2)
+        "welfare_ratio_vs_same_model_only": paired_eval["welfare_ratio_vs_same_model_only"],
+        "welfare_ratio_vs_oracle_parity": paired_eval["welfare_ratio_vs_oracle_parity"],
+        "bootstrap_diff_ci_95": paired_eval["bootstrap_diff_ci_95"]
     }
 
     payload = {
         "metrics": metrics,
-        "isolated_clearing": {
-            "total_welfare": isolated_res["total_welfare"],
-            "traded_volume_m": isolated_res["traded_volume_m"],
-            "num_matches": isolated_res["num_matches"]
-        },
-        "substitutability_clearing": {
-            "total_welfare": substitutability_res["total_welfare"],
-            "traded_volume_m": substitutability_res["traded_volume_m"],
-            "num_matches": substitutability_res["num_matches"]
+        "paired_seeds_evaluation": paired_eval,
+        "sample_orderbook_clearing": {
+            "isolated": {
+                "total_welfare": isolated_res["total_welfare"],
+                "traded_volume_m": isolated_res["traded_volume_m"],
+                "num_matches": isolated_res["num_matches"]
+            },
+            "substitutability": {
+                "total_welfare": substitutability_res["total_welfare"],
+                "traded_volume_m": substitutability_res["traded_volume_m"],
+                "num_matches": substitutability_res["num_matches"]
+            }
         }
     }
     write_json_atomic(output_path, payload)

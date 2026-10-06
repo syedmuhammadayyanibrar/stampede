@@ -130,6 +130,7 @@ def run_obsolescence_backtest(
     }
 
     curves_payload = {
+        "status": f"exploratory, n={len(events)}, not gated" if len(events) < 60 else "gated",
         "metrics": metrics,
         "hazard_sweep": hazard_sweep,
         "obsolescence_premiums": premiums,

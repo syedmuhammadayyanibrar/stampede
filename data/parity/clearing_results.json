@@ -1,19 +1,49 @@
 {
   "metrics": {
     "G20_clearing_envy_freeness_rate": 1.0,
-    "G21_market_welfare_uplift_ratio": 4.0064,
-    "isolated_welfare_usd": 411.56,
-    "substitutability_welfare_usd": 1648.88,
-    "welfare_uplift_pct": 300.64
+    "G21_market_welfare_uplift_ratio": 1.1809,
+    "welfare_ratio_vs_same_model_only": 1.1809,
+    "welfare_ratio_vs_oracle_parity": 1.009,
+    "bootstrap_diff_ci_95": [
+      390.7,
+      1049.78
+    ]
   },
-  "isolated_clearing": {
-    "total_welfare": 411.565,
-    "traded_volume_m": 164.5,
-    "num_matches": 9
+  "paired_seeds_evaluation": {
+    "num_seeds": 10,
+    "mean_welfare": {
+      "same_model_only": 4208.99,
+      "random_match": 5075.2,
+      "parity": 4970.56,
+      "oracle_parity": 4926.35,
+      "par_conversion": 1223.39
+    },
+    "mean_fill_rate": {
+      "same_model_only": 0.8392,
+      "random_match": 0.9792,
+      "parity": 0.9744,
+      "oracle_parity": 0.9738,
+      "par_conversion": 0.5
+    },
+    "welfare_ratio_vs_same_model_only": 1.1809,
+    "welfare_ratio_vs_oracle_parity": 1.009,
+    "bootstrap_diff_ci_95": [
+      390.7,
+      1049.78
+    ],
+    "G20_clearing_envy_freeness_rate": 1.0,
+    "G21_market_welfare_uplift_ratio": 1.1809
   },
-  "substitutability_clearing": {
-    "total_welfare": 1648.876,
-    "traded_volume_m": 529.5,
-    "num_matches": 31
+  "sample_orderbook_clearing": {
+    "isolated": {
+      "total_welfare": 411.565,
+      "traded_volume_m": 164.5,
+      "num_matches": 9
+    },
+    "substitutability": {
+      "total_welfare": 813.548,
+      "traded_volume_m": 286.9,
+      "num_matches": 16
+    }
   }
 }

@@ -104,6 +104,7 @@ def run_valuation_module(
     }
 
     payload = {
+        "params_source": "assumed_v1",
         "metrics": metrics,
         "panel_results": panel_results,
         "shapley": shapley_res,

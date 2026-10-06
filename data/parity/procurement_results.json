@@ -1,47 +1,57 @@
 {
   "metrics": {
-    "G23_procurement_outperformance_vs_baseline": 0.3357,
+    "G23_procurement_outperformance_vs_baseline": 0.093,
     "G24_allocation_regret_ratio": 0.0638,
     "G25_downside_risk_containment": 1.0,
-    "G26_provider_concentration_limit": 0.4783,
+    "G26_provider_concentration_limit": 0.5,
     "G27_numeric_grounding_accuracy": 1.0,
     "G28_corrupted_csv_header_repair_rate": 1.0,
     "G29_corrupted_csv_row_recovery_rate": 1.0
   },
-  "optimization": {
+  "planner_parity_core": {
     "parity_allocations": [
       {
-        "archetype": "code_generation",
-        "model": "anthropic/claude-3.5-sonnet",
-        "provider": "anthropic",
-        "volume_m": 50.0,
-        "unit_price": 4.0,
-        "gross_cost": 200.0,
-        "resale_recovery": 13.5,
-        "net_cost": 186.5
-      },
-      {
-        "archetype": "structured_extraction",
-        "model": "deepseek/deepseek-chat",
-        "provider": "deepseek",
-        "volume_m": 80.0,
-        "unit_price": 1.2,
-        "gross_cost": 96.0,
-        "resale_recovery": 6.48,
-        "net_cost": 89.52
-      },
-      {
-        "archetype": "reasoning_math",
+        "archetype": "json_extraction",
         "model": "openai/gpt-4o",
         "provider": "openai",
-        "volume_m": 40.0,
+        "volume_m": 50.0,
         "unit_price": 4.5,
-        "gross_cost": 180.0,
-        "resale_recovery": 12.15,
-        "net_cost": 167.85
+        "gross_cost": 225.0,
+        "resale_recovery": 15.19,
+        "net_cost": 209.81
       },
       {
-        "archetype": "translation",
+        "archetype": "arithmetic_reasoning",
+        "model": "openai/gpt-4o",
+        "provider": "openai",
+        "volume_m": 65.0,
+        "unit_price": 4.5,
+        "gross_cost": 292.5,
+        "resale_recovery": 19.74,
+        "net_cost": 272.76
+      },
+      {
+        "archetype": "arithmetic_reasoning",
+        "model": "anthropic/claude-3.5-sonnet",
+        "provider": "anthropic",
+        "volume_m": 15.0,
+        "unit_price": 4.0,
+        "gross_cost": 60.0,
+        "resale_recovery": 4.05,
+        "net_cost": 55.95
+      },
+      {
+        "archetype": "ticket_classification",
+        "model": "anthropic/claude-3.5-sonnet",
+        "provider": "anthropic",
+        "volume_m": 40.0,
+        "unit_price": 4.0,
+        "gross_cost": 160.0,
+        "resale_recovery": 10.8,
+        "net_cost": 149.2
+      },
+      {
+        "archetype": "constraint_rewrite",
         "model": "anthropic/claude-3.5-sonnet",
         "provider": "anthropic",
         "volume_m": 60.0,
@@ -53,7 +63,7 @@
     ],
     "baseline_allocations": [
       {
-        "archetype": "code_generation",
+        "archetype": "json_extraction",
         "model": "openai/gpt-4o",
         "provider": "openai",
         "volume_m": 50.0,
@@ -62,7 +72,7 @@
         "net_cost": 225.0
       },
       {
-        "archetype": "structured_extraction",
+        "archetype": "arithmetic_reasoning",
         "model": "openai/gpt-4o",
         "provider": "openai",
         "volume_m": 80.0,
@@ -71,7 +81,7 @@
         "net_cost": 360.0
       },
       {
-        "archetype": "reasoning_math",
+        "archetype": "ticket_classification",
         "model": "openai/gpt-4o",
         "provider": "openai",
         "volume_m": 40.0,
@@ -80,7 +90,7 @@
         "net_cost": 180.0
       },
       {
-        "archetype": "translation",
+        "archetype": "constraint_rewrite",
         "model": "anthropic/claude-3.5-sonnet",
         "provider": "anthropic",
         "volume_m": 60.0,
@@ -89,16 +99,202 @@
         "net_cost": 240.0
       }
     ],
-    "total_parity_net_spend_usd": 667.67,
+    "total_parity_net_spend_usd": 911.52,
     "total_baseline_spend_usd": 1005.0,
-    "cost_outperformance_pct": 0.3357,
+    "cost_outperformance_pct": 0.093,
     "regret_ratio": 0.0638,
     "spend_ceiling_compliant": 1.0,
-    "max_provider_share": 0.4783,
+    "max_provider_share": 0.5,
     "spend_ceiling_usd": 1200.0
   },
+  "agent_parity_agent_comparison": {
+    "num_scenarios": 1,
+    "agent_status": "EVALUATED",
+    "agent_runs": [
+      {
+        "status": "PASS",
+        "tool_calls_used": 6,
+        "rationale": "Repaired plan: expected demand is 168.75M tokens with candidate cost $0.55/M and forward strike $4.25.",
+        "grounding": {
+          "is_grounded": true,
+          "accuracy": 1.0,
+          "total_numbers": 3,
+          "bound_tool_calls": {
+            "168.75": "call_36f7c1b6",
+            "$0.55": "call_ef6f1233",
+            "$4.25": "call_076ab729"
+          },
+          "unverified_numbers": []
+        },
+        "tool_history": [
+          {
+            "tool_call_id": "call_b556b94b",
+            "tool_name": "load_usage",
+            "args": {
+              "csv_content": "..."
+            },
+            "result": {
+              "num_days": 1,
+              "total_tokens_m": 1.5,
+              "mean_daily_tokens_m": 1.5
+            }
+          },
+          {
+            "tool_call_id": "call_c32d4d93",
+            "tool_name": "extract_plan",
+            "args": {
+              "plan_text": "Expanding European cluster deployment by +35% in month 2"
+            },
+            "result": {
+              "demand_multiplier": 1.25,
+              "has_milestones": true,
+              "extracted_quote": "Expanding European cluster deployment by"
+            }
+          },
+          {
+            "tool_call_id": "call_36f7c1b6",
+            "tool_name": "forecast_usage",
+            "args": {
+              "mean_daily_m": 1.5,
+              "multiplier": 1.25
+            },
+            "result": {
+              "horizon_days": 90,
+              "expected_total_m": 168.75,
+              "p10_total_m": 143.44,
+              "p90_total_m": 202.5
+            }
+          },
+          {
+            "tool_call_id": "call_ef6f1233",
+            "tool_name": "get_substitutability",
+            "args": {
+              "archetype": "code_generation",
+              "candidate_model": "openai/gpt-4o-mini"
+            },
+            "result": {
+              "archetype": "code_generation",
+              "candidate_model": "openai/gpt-4o-mini",
+              "decision": "NON_INFERIOR",
+              "p_non_inferior": 0.94,
+              "effective_cost_usd": 0.55
+            }
+          },
+          {
+            "tool_call_id": "call_076ab729",
+            "tool_name": "value_contract",
+            "args": {
+              "spot_initial": 5.0,
+              "tenor_days": 90,
+              "discount_pct": 0.15
+            },
+            "result": {
+              "forward_strike": 4.25,
+              "resale_option_value": 0.4,
+              "minimum_required_discount": 0.15,
+              "expected_value_usd": 4.65
+            }
+          },
+          {
+            "tool_call_id": "call_b63feffa",
+            "tool_name": "list_offers",
+            "args": {},
+            "result": {
+              "offers": [
+                {
+                  "offer_id": "off_01",
+                  "model": "openai/gpt-4o-mini",
+                  "tenor_days": 90,
+                  "discount_pct": 0.2,
+                  "price_per_m": 0.4
+                },
+                {
+                  "offer_id": "off_02",
+                  "model": "deepseek/deepseek-chat",
+                  "tenor_days": 90,
+                  "discount_pct": 0.15,
+                  "price_per_m": 1.0
+                },
+                {
+                  "offer_id": "off_03",
+                  "model": "anthropic/claude-3.5-sonnet",
+                  "tenor_days": 90,
+                  "discount_pct": 0.12,
+                  "price_per_m": 3.5
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "core_runs": [
+      {
+        "parity_allocations": [
+          {
+            "archetype": "code_generation",
+            "model": "openai/gpt-4o",
+            "provider": "openai",
+            "volume_m": 50.0,
+            "unit_price": 4.5,
+            "gross_cost": 225.0,
+            "resale_recovery": 15.19,
+            "net_cost": 209.81
+          },
+          {
+            "archetype": "structured_extraction",
+            "model": "openai/gpt-4o",
+            "provider": "openai",
+            "volume_m": 15.0,
+            "unit_price": 4.5,
+            "gross_cost": 67.5,
+            "resale_recovery": 4.56,
+            "net_cost": 62.94
+          },
+          {
+            "archetype": "structured_extraction",
+            "model": "google/gemini-2.0-flash-001",
+            "provider": "google",
+            "volume_m": 65.0,
+            "unit_price": 0.6,
+            "gross_cost": 39.0,
+            "resale_recovery": 2.63,
+            "net_cost": 36.37
+          }
+        ],
+        "baseline_allocations": [
+          {
+            "archetype": "code_generation",
+            "model": "openai/gpt-4o",
+            "provider": "openai",
+            "volume_m": 50.0,
+            "unit_price": 4.5,
+            "gross_cost": 225.0,
+            "net_cost": 225.0
+          },
+          {
+            "archetype": "structured_extraction",
+            "model": "openai/gpt-4o",
+            "provider": "openai",
+            "volume_m": 80.0,
+            "unit_price": 4.5,
+            "gross_cost": 360.0,
+            "net_cost": 360.0
+          }
+        ],
+        "total_parity_net_spend_usd": 309.12,
+        "total_baseline_spend_usd": 585.0,
+        "cost_outperformance_pct": 0.4716,
+        "regret_ratio": 0.0638,
+        "spend_ceiling_compliant": 1.0,
+        "max_provider_share": 0.5,
+        "spend_ceiling_usd": 1200.0
+      }
+    ],
+    "core_mean_outperformance": 0.4716
+  },
   "grounding": {
-    "narrative": "Procurement analysis completed: baseline expenditure is $1005.00 compared to $667.67 under Parity optimal reservation. This achieves an outperformance of 33.57% while adhering to the $1200.00 spend ceiling. Maximum provider allocation is constrained to 47.83%.",
+    "narrative": "Procurement analysis completed: baseline expenditure is $1005.00 compared to $911.52 under Parity optimal reservation. This achieves an outperformance of 9.30% while adhering to the $1200.00 spend ceiling. Maximum provider allocation is constrained to 50.00%.",
     "evaluation": {
       "is_grounded": true,
       "accuracy": 1.0,
@@ -113,5 +309,8 @@
     "total_suites": 3,
     "total_valid_rows": 64,
     "total_recovered_rows": 64
+  },
+  "extra_not_gated": {
+    "provider_concentration_limit": 0.5
   }
 }

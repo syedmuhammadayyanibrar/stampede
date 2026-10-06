@@ -23,12 +23,15 @@ def build_gate_row(
     gate_id: str,
     spec: Dict[str, Any],
     observed_val: float,
-    ci: Optional[Tuple[float, float]] = None
+    ci: Optional[Tuple[float, float]] = None,
+    is_skipped: Optional[str] = None
 ) -> Dict[str, Any]:
     target_dir = spec.get("target_direction", "ge")
     threshold = float(spec.get("threshold", 0.0))
     
-    if ci is not None and ci[0] <= threshold <= ci[1]:
+    if is_skipped:
+        status = is_skipped
+    elif ci is not None and ci[0] <= threshold <= ci[1]:
         status = "INCONCLUSIVE"
     elif target_dir == "ge":
         status = "PASS" if observed_val >= threshold else "FAIL"
@@ -42,6 +45,7 @@ def build_gate_row(
         "target_direction": target_dir,
         "threshold": threshold,
         "unit": spec.get("unit", ""),
+        "value": round(observed_val, 4),
         "observed_value": round(observed_val, 4),
         "status": status,
         "ci_95": [round(ci[0], 4), round(ci[1], 4)] if ci else None
@@ -73,6 +77,7 @@ def generate_markdown_report(results: List[Dict[str, Any]], duration_sec: float)
     total_gates = len(results)
     passed_gates = sum(1 for r in results if r["status"] == "PASS")
     failed_gates = sum(1 for r in results if r["status"] == "FAIL")
+    skipped_gates = sum(1 for r in results if str(r["status"]).startswith("SKIPPED"))
     inconclusive_gates = sum(1 for r in results if r["status"] == "INCONCLUSIVE")
 
     lines = [
@@ -82,6 +87,7 @@ def generate_markdown_report(results: List[Dict[str, Any]], duration_sec: float)
         f"- **Total Gates**: {total_gates}",
         f"- **Passed**: {passed_gates}",
         f"- **Failed**: {failed_gates}",
+        f"- **Skipped**: {skipped_gates}",
         f"- **Inconclusive**: {inconclusive_gates}",
         f"- **Runtime**: {duration_sec:.2f} seconds",
         "",
@@ -181,12 +187,22 @@ def main() -> int:
     observed_metrics = load_observed_metrics()
     results = []
 
+    events_csv = Path("data/price_history/events.csv")
+    sufficient_events = False
+    if events_csv.exists():
+        lines = [line.strip() for line in events_csv.read_text(encoding="utf-8").splitlines() if line.strip()]
+        if len(lines) - 1 >= 60:
+            sufficient_events = True
+
     for gid in sorted(thresholds.keys()):
         spec = thresholds[gid]
         if gid == "G30":
             continue
         val = observed_metrics.get(gid, 0.0)
-        row = build_gate_row(gate_id=gid, spec=spec, observed_val=val)
+        is_skipped = None
+        if not sufficient_events and gid in ("G08", "G09", "G10", "G11"):
+            is_skipped = "SKIPPED(insufficient_data)"
+        row = build_gate_row(gate_id=gid, spec=spec, observed_val=val, is_skipped=is_skipped)
         results.append(row)
 
     duration_sec = time.perf_counter() - start_time
@@ -207,17 +223,20 @@ def main() -> int:
         "total_gates": len(results),
         "passed_gates": sum(1 for r in results if r["status"] == "PASS"),
         "failed_gates": sum(1 for r in results if r["status"] == "FAIL"),
+        "skipped_gates": sum(1 for r in results if str(r["status"]).startswith("SKIPPED")),
         "duration_seconds": round(duration_sec, 4),
         "gates": results
     }
 
     write_json_atomic("evals/parity_report.json", report_data)
-    md_content = generate_markdown_report(results, duration_sec)
-    write_text_atomic("evals/parity_report.md", md_content)
+    write_text_atomic("evals/parity_report.md", md_content := generate_markdown_report(results, duration_sec))
+    write_json_atomic("reports/parity_eval_results.json", report_data)
+    write_text_atomic("reports/parity_eval_report.md", md_content)
 
     print_evaluation_summary(results, console)
 
-    all_passed = all(r["status"] == "PASS" for r in results)
+    valid_statuses = {"PASS", "SKIPPED(insufficient_data)", "SKIPPED(no_key)"}
+    all_passed = all(r["status"] in valid_statuses for r in results)
     return 0 if all_passed else 1
 
 if __name__ == "__main__":
