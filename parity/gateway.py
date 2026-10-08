@@ -22,7 +22,8 @@ class LLMGateway:
         base_url: Optional[str] = None,
         cache_dir: Path = Path("data/cache/llm"),
         budget_usd: float = 40.0,
-        offline: bool = False
+        offline: bool = False,
+        session_cache: Optional[Dict[str, Any]] = None
     ) -> None:
         self.api_key = api_key or os.environ.get("OPENROUTER_API_KEY", "")
         self.base_url = base_url or os.environ.get("PARITY_BASE_URL", "https://openrouter.ai/api/v1")
@@ -31,6 +32,7 @@ class LLMGateway:
         self.budget_usd = float(os.environ.get("PARITY_BUDGET_USD", str(budget_usd)))
         self.offline = offline or bool(os.environ.get("PARITY_OFFLINE", ""))
         self.total_spend_usd = 0.0
+        self.session_cache = session_cache if session_cache is not None else {}
 
     def compute_cache_key(
         self,
@@ -61,14 +63,23 @@ class LLMGateway:
         tools: Optional[List[Dict[str, Any]]] = None,
         response_format: Optional[Dict[str, Any]] = None,
         cache: bool = True,
-        tag: str = ""
+        tag: str = "",
+        cache_scope: str = "disk",
+        persist_outputs: bool = True,
+        session_cache: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         cache_key = self.compute_cache_key(model, messages, temperature, max_tokens, tools, response_format)
-        cache_file = self.cache_dir / f"{cache_key}.json"
+        target_session_cache = session_cache if session_cache is not None else self.session_cache
 
-        if cache and cache_file.exists():
-            with open(cache_file, "r", encoding="utf-8") as f:
-                return json.load(f)
+        if cache:
+            if cache_scope == "session":
+                if cache_key in target_session_cache:
+                    return target_session_cache[cache_key]
+            else:
+                cache_file = self.cache_dir / f"{cache_key}.json"
+                if cache_file.exists():
+                    with open(cache_file, "r", encoding="utf-8") as f:
+                        return json.load(f)
 
         if self.offline:
             raise CacheMiss(f"Cache miss in offline mode for model {model} (key: {cache_key})")
@@ -145,7 +156,11 @@ class LLMGateway:
         }
 
         if cache:
-            with open(cache_file, "w", encoding="utf-8") as f:
-                json.dump(result, f, indent=2)
+            if cache_scope == "session":
+                target_session_cache[cache_key] = result
+            elif persist_outputs:
+                cache_file = self.cache_dir / f"{cache_key}.json"
+                with open(cache_file, "w", encoding="utf-8") as f:
+                    json.dump(result, f, indent=2)
 
         return result

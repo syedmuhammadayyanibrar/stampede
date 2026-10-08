@@ -11,14 +11,20 @@ def simulate_jump_diffusion_paths(
     jump_mean: float,
     tenor_days: int = 90,
     num_paths: int = 5000,
-    seed: int = 42
+    seed: int = 42,
+    random_draws: Optional[Any] = None
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    rng = np.random.default_rng(seed)
     time_years = tenor_days / 365.0
     dt = time_years / tenor_days
     
-    z = rng.standard_normal(size=(num_paths, tenor_days))
-    arrivals = rng.poisson(lam=hazard_rate * dt, size=(num_paths, tenor_days))
+    if random_draws is not None and hasattr(random_draws, "get_price_draws"):
+        z, arrivals = random_draws.get_price_draws(num_paths, tenor_days, hazard_rate * dt)
+    elif random_draws is not None and isinstance(random_draws, tuple):
+        z, arrivals = random_draws
+    else:
+        rng = np.random.default_rng(seed)
+        z = rng.standard_normal(size=(num_paths, tenor_days))
+        arrivals = rng.poisson(lam=hazard_rate * dt, size=(num_paths, tenor_days))
     
     drift_step = (drift - 0.5 * (volatility ** 2)) * dt
     diffusion_step = volatility * math.sqrt(dt) * z

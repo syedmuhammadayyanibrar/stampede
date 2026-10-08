@@ -14,8 +14,13 @@ from copilot.fit_check import evaluate_prompt_fit
 from copilot.explain import generate_copilot_explanation
 from migration import get_empirical_migration_dataset
 from crunch_experiment import run_data_driven_crunch_comparison
+from stampede.api.routes import router as stampede_router
+from stampede.settings import settings
+from stampede.costs import global_cost_ledger
+from stampede.stages.seller_view import compute_seller_uplift
 
-app = FastAPI(title="Touchmark Risk Engine & Contract Copilot API")
+app = FastAPI(title="Stampede Risk Engine & Contract API")
+app.include_router(stampede_router, prefix="/api/v1")
 
 class ParseRequest(BaseModel):
     csv_content: str
@@ -37,6 +42,26 @@ class CopilotRunRequest(BaseModel):
 @app.get("/api/health")
 def health():
     return {"status": "ok", "service": "touchmark-risk-engine"}
+
+@app.get("/budget")
+def root_budget():
+    return {
+        "session_cap_usd": settings.session_cap_usd,
+        "daily_cap_usd": settings.daily_cap_usd,
+        "global_daily_spend_usd": global_cost_ledger.get_daily_spend(),
+        "kill_switch_active": settings.kill_switch_active
+    }
+
+@app.post("/seller/uplift")
+def root_seller_uplift(body: Optional[dict] = Body(default=None)):
+    body = body or {}
+    report = compute_seller_uplift(
+        capacity_params=body.get("capacity_params"),
+        demand_params=body.get("demand_params"),
+        committed_share=body.get("committed_share", 0.70),
+        forecast_error=body.get("forecast_error", 0.20)
+    )
+    return report.model_dump()
 
 @app.get("/api/data")
 def get_site_data():

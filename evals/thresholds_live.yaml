@@ -1,0 +1,90 @@
+L01:
+  name: whatif_exactness_recompute_max_diff
+  metric: max_absolute_difference
+  target_direction: le
+  threshold: 0.0
+  unit: absolute_diff
+L02:
+  name: whatif_p95_latency_seconds
+  metric: p95_latency
+  target_direction: le
+  threshold: 2.0
+  unit: seconds
+L03:
+  name: provenance_coverage_of_numeric_leaves
+  metric: coverage_rate
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+L04:
+  name: ungrounded_numeric_claims_count
+  metric: ungrounded_claims
+  target_direction: le
+  threshold: 0.0
+  unit: count
+L05:
+  name: budget_safety_cap_violations
+  metric: cap_violations
+  target_direction: le
+  threshold: 0.0
+  unit: count
+L06:
+  name: privacy_sentinel_hits_after_wipe
+  metric: sentinel_hits
+  target_direction: le
+  threshold: 0.0
+  unit: count
+L07:
+  name: sse_resume_exactness_ratio
+  metric: exactness_rate
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+L08:
+  name: live_vs_offline_decision_equivalence
+  metric: equivalence_rate
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+L09:
+  name: quote_fixtures_and_property_tests_pass_rate
+  metric: pass_rate
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+L10:
+  name: judge_adjust_interval_coverage_and_mae
+  metric: coverage_rate
+  target_direction: ge
+  threshold: 0.85
+  unit: ratio
+L11:
+  name: ingestion_fallback_silent_wrong_accept_rate
+  metric: parse_success_rate
+  target_direction: ge
+  threshold: 0.90
+  unit: ratio
+L12:
+  name: constraint_extraction_field_f1
+  metric: f1_score
+  target_direction: ge
+  threshold: 0.90
+  unit: score
+L13:
+  name: quote_email_extraction_field_f1
+  metric: f1_score
+  target_direction: ge
+  threshold: 0.85
+  unit: score
+L14:
+  name: end_to_end_fake_models_cost_estimate_ratio
+  metric: cost_ratio
+  target_direction: le
+  threshold: 1.25
+  unit: ratio
+L15:
+  name: input_sensitivity_expected_direction_fraction
+  metric: direction_fraction
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio

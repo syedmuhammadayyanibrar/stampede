@@ -1,0 +1,25 @@
+{
+  "meta-llama/llama-3.3-70b-instruct": {
+    "sensitivity": {
+      "successes": 271,
+      "failures": 2,
+      "total": 273,
+      "rate": 0.9927,
+      "beta_posterior": {
+        "alpha": 272,
+        "beta": 3
+      }
+    },
+    "specificity": {
+      "successes": 25,
+      "failures": 2,
+      "total": 27,
+      "rate": 0.9259,
+      "beta_posterior": {
+        "alpha": 26,
+        "beta": 3
+      }
+    },
+    "youden_j": 0.9186
+  }
+}

@@ -39,15 +39,15 @@ def test_procurement_optimization_constraints() -> None:
     assert res["cost_outperformance_pct"] >= 0.05
     assert res["regret_ratio"] <= 0.08
 
-def test_grounding_guard_catches_hallucinations() -> None:
+def test_grounding_guard_catches_unverified_numbers() -> None:
     ground_truth = {"total_spend": 500.0, "savings_pct": 25.5}
     grounded_text = "Analysis shows total spend is $500.00 with 25.50% savings."
     eval_good = verify_narrative_grounding(grounded_text, ground_truth)
     assert eval_good["is_grounded"] is True
     assert eval_good["accuracy"] == 1.0
 
-    hallucinated_text = "Analysis shows total spend is $9999.00 with 99.00% savings."
-    eval_bad = verify_narrative_grounding(hallucinated_text, ground_truth)
+    unverified_text = "Analysis shows total spend is $9999.00 with 99.00% savings."
+    eval_bad = verify_narrative_grounding(unverified_text, ground_truth)
     assert eval_bad["is_grounded"] is False
     assert eval_bad["accuracy"] < 1.0
     assert len(eval_bad["unverified_numbers"]) > 0

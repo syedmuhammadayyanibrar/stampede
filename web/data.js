@@ -794,7 +794,7 @@ window.EMBEDDED_SITE_DATA = {
     "narrative": {
       "source": "deterministic_prewritten",
       "headline_summary": "Touchmark's secondary resale mechanism exhibits a primary Benchmark Liquidity Crunch Ratio of 11.10x (95% CI: [10.43x, 11.84x]) relative to unshocked counterfactual value, with secondary market spreads widening by 6.34x (95% CI: [6.30x, 6.38x]) from 6.0% to 38.0%.",
-      "economic_summary": "Isolating deflation from liquidity risk: entering at the engine's fair-value forward price ($3.63/M) yields expected parity unconditionally, but conditional on a correlated shock window, the forward holder pays an expected net cost of $3.259/M versus $1.464/M on spot (+122.6% penalty, +$1.795/M). Secondary market spread blowout alone accounts for +$0.190/M in unrecovered liquidation friction, while entering at a naive 15% spot discount adds another +23.5% (+$0.621/M) penalty from unhedged hardware deflation."
+      "economic_summary": "Isolating deflation from liquidity risk: entering at the engine's fair-value forward price ($3.63/M) yields expected equivalence unconditionally, but conditional on a correlated shock window, the forward holder pays an expected net cost of $3.259/M versus $1.464/M on spot (+122.6% penalty, +$1.795/M). Secondary market spread blowout alone accounts for +$0.190/M in unrecovered liquidation friction, while entering at a naive 15% spot discount adds another +23.5% (+$0.621/M) penalty from unhedged hardware deflation."
     },
     "comparison_bars": {
       "categories": [

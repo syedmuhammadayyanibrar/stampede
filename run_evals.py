@@ -119,7 +119,7 @@ def run_all_evals():
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CSV Parser** | Header mapping accuracy | {scorecard['csv_parser_accuracy']:.1%} | Fuzzy string match (75.0%) | $\ge {th_parser * 100:.1f}\%$ | **PASS** |
 | **Plan Extractor** | Event recall | {scorecard['plan_event_recall']:.1%} | Regex keyword (60.0%) | $\ge {th_recall * 100:.1f}\%$ | **PASS** |
-| **Hallucination Guard** | Unverified quotes | {scorecard['plan_unverified_quote_rate']:.1%} | No check (25.0% unverified) | $\le {th_unverified * 100:.1f}\%$ | **PASS** |
+| **Numeric Grounding Check** | Unverified quotes | {scorecard['plan_unverified_quote_rate']:.1%} | No check (25.0% unverified) | $\le {th_unverified * 100:.1f}\%$ | **PASS** |
 | **Sizing Engine** | Outperformance vs P90 Heuristic | +{scorecard['sizing_outperformance_pct']:.2f}% | P90 Peak Heuristic (0.0%) | $\ge {th_sizing:.1f}\%$ | **PASS** |
 | **Sizing Engine (Diagnostic)** | Outperformance vs Forecast-Mean | +{scorecard['sizing_outperformance_vs_mean_pct']:.2f}% | Forecast Mean (0.0%) | Diagnostic only | **DIAGNOSTIC** |
 | **Number Grounding** | Detection fidelity | {scorecard['grounding_guard_accuracy']:.1%} | No grounding (blind generation) | $\ge {th_grounding * 100:.1f}\%$ | **PASS** |

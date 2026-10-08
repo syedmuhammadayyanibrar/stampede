@@ -7,7 +7,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CSV Parser** | Header mapping accuracy | 100.0% | Fuzzy string match (75.0%) | $\ge 100.0\%$ | **PASS** |
 | **Plan Extractor** | Event recall | 100.0% | Regex keyword (60.0%) | $\ge 80.0\%$ | **PASS** |
-| **Hallucination Guard** | Unverified quotes | 0.0% | No check (25.0% unverified) | $\le 2.0\%$ | **PASS** |
+| **Numeric Grounding Check** | Unverified quotes | 0.0% | No check (25.0% unverified) | $\le 2.0\%$ | **PASS** |
 | **Sizing Engine** | Outperformance vs P90 Heuristic | +4.45% | P90 Peak Heuristic (0.0%) | $\ge 3.0\%$ | **PASS** |
 | **Sizing Engine (Diagnostic)** | Outperformance vs Forecast-Mean | +0.01% | Forecast Mean (0.0%) | Diagnostic only | **DIAGNOSTIC** |
 | **Number Grounding** | Detection fidelity | 100.0% | No grounding (blind generation) | $\ge 100.0\%$ | **PASS** |

@@ -1,0 +1,196 @@
+{
+  "metadata": {
+    "timestamp": 1791439886.1461163,
+    "duration_seconds": 1.437,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+    "seed": 42,
+    "fast": false,
+    "offline": true
+  },
+  "gates": [
+    {
+      "gate_id": "L01",
+      "name": "whatif_exactness_recompute_max_diff",
+      "metric": "max_absolute_difference",
+      "target_direction": "le",
+      "threshold": 0.0,
+      "unit": "absolute_diff",
+      "value": 0.0,
+      "observed_value": 0.0,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L02",
+      "name": "whatif_p95_latency_seconds",
+      "metric": "p95_latency",
+      "target_direction": "le",
+      "threshold": 2.0,
+      "unit": "seconds",
+      "value": 0.0675,
+      "observed_value": 0.0675,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L03",
+      "name": "provenance_coverage_of_numeric_leaves",
+      "metric": "coverage_rate",
+      "target_direction": "ge",
+      "threshold": 1.0,
+      "unit": "ratio",
+      "value": 1.0,
+      "observed_value": 1.0,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L04",
+      "name": "ungrounded_numeric_claims_count",
+      "metric": "ungrounded_claims",
+      "target_direction": "le",
+      "threshold": 0.0,
+      "unit": "count",
+      "value": 0.0,
+      "observed_value": 0.0,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L05",
+      "name": "budget_safety_cap_violations",
+      "metric": "cap_violations",
+      "target_direction": "le",
+      "threshold": 0.0,
+      "unit": "count",
+      "value": 0.0,
+      "observed_value": 0.0,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L06",
+      "name": "privacy_sentinel_hits_after_wipe",
+      "metric": "sentinel_hits",
+      "target_direction": "le",
+      "threshold": 0.0,
+      "unit": "count",
+      "value": 0.0,
+      "observed_value": 0.0,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L07",
+      "name": "sse_resume_exactness_ratio",
+      "metric": "exactness_rate",
+      "target_direction": "ge",
+      "threshold": 1.0,
+      "unit": "ratio",
+      "value": 1.0,
+      "observed_value": 1.0,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L08",
+      "name": "live_vs_offline_decision_equivalence",
+      "metric": "equivalence_rate",
+      "target_direction": "ge",
+      "threshold": 1.0,
+      "unit": "ratio",
+      "value": 1.0,
+      "observed_value": 1.0,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L09",
+      "name": "quote_fixtures_and_property_tests_pass_rate",
+      "metric": "pass_rate",
+      "target_direction": "ge",
+      "threshold": 1.0,
+      "unit": "ratio",
+      "value": 1.0,
+      "observed_value": 1.0,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L10",
+      "name": "judge_adjust_interval_coverage_and_mae",
+      "metric": "coverage_rate",
+      "target_direction": "ge",
+      "threshold": 0.85,
+      "unit": "ratio",
+      "value": 1.0,
+      "observed_value": 1.0,
+      "status": "PASS",
+      "ci_95": [
+        0.98,
+        1.02
+      ]
+    },
+    {
+      "gate_id": "L11",
+      "name": "ingestion_fallback_silent_wrong_accept_rate",
+      "metric": "parse_success_rate",
+      "target_direction": "ge",
+      "threshold": 0.9,
+      "unit": "ratio",
+      "value": 0.0,
+      "observed_value": 0.0,
+      "status": "SKIPPED(no_key)",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L12",
+      "name": "constraint_extraction_field_f1",
+      "metric": "f1_score",
+      "target_direction": "ge",
+      "threshold": 0.9,
+      "unit": "score",
+      "value": 0.0,
+      "observed_value": 0.0,
+      "status": "SKIPPED(no_key)",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L13",
+      "name": "quote_email_extraction_field_f1",
+      "metric": "f1_score",
+      "target_direction": "ge",
+      "threshold": 0.85,
+      "unit": "score",
+      "value": 0.0,
+      "observed_value": 0.0,
+      "status": "SKIPPED(no_key)",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L14",
+      "name": "end_to_end_fake_models_cost_estimate_ratio",
+      "metric": "cost_ratio",
+      "target_direction": "le",
+      "threshold": 1.25,
+      "unit": "ratio",
+      "value": 0.0001,
+      "observed_value": 0.0001,
+      "status": "PASS",
+      "ci_95": null
+    },
+    {
+      "gate_id": "L15",
+      "name": "input_sensitivity_expected_direction_fraction",
+      "metric": "direction_fraction",
+      "target_direction": "ge",
+      "threshold": 1.0,
+      "unit": "ratio",
+      "value": 1.0,
+      "observed_value": 1.0,
+      "status": "PASS",
+      "ci_95": null
+    }
+  ]
+}

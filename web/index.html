@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Touchmark | Forward AI Capacity Pricing & Liquidity Risk</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3">
   <script src="chart.min.js"></script>
   <script src="data.js"></script>
 </head>
@@ -17,6 +17,7 @@
         <span class="brand-tag">Risk Engineering & Copilot</span>
       </div>
       <nav class="nav-links">
+        <a href="#stampede-live" class="nav-live-highlight">Stampede Live</a>
         <a href="#about">Mechanism</a>
         <a href="#contract-builder">Pricing Tool</a>
         <a href="#copilot">Contract Copilot</a>
@@ -70,7 +71,7 @@
       <div class="section-container">
         <h2 class="reading-heading">Non-storable forward commitments for compute tokens.</h2>
         <p class="reading-body">
-          Inference capacity cannot be warehoused in advance. When an engineering team enters a forward contract on Touchmark, they are locking in delivery of a guaranteed flow of tokens at a designated future date. Touchmark offsets deployment uncertainty by operating a secondary resale marketplace: if a team's production rollout is delayed or volume falls below forecast, surplus tokens can be liquidated back to other network buyers.
+          Inference capacity cannot be warehoused in advance. When an engineering team enters a forward contract on Touchmark, they are locking in delivery of a committed flow of tokens at a designated future date. Touchmark offsets deployment uncertainty by operating a secondary resale marketplace: if a team's production rollout is delayed or volume falls below forecast, surplus tokens can be liquidated back to other network buyers.
         </p>
       </div>
     </section>
@@ -578,6 +579,470 @@
         </div>
       </div>
     </section>
+
+    <section id="stampede-live" class="section stampede-live-section">
+      <div class="section-container">
+        <div class="section-header">
+          <div class="section-tag">Live Procurement Intelligence</div>
+          <h2 class="section-title">Stampede Live Decision Engine</h2>
+          <p class="section-subtitle">Real-time inference capacity optimization. Bring your usage data, prompts, constraints, and provider quotes to compute optimal sizing, reservation prices, and secondary exit value without charts or speculative projections.</p>
+        </div>
+
+        <div class="live-status-bar">
+          <div class="live-status-item">Session: <strong id="live-session-id">Initializing...</strong></div>
+          <div class="live-status-item">Spend Meter: <progress id="live-spend-meter" value="0" max="2.00" style="vertical-align: middle;"></progress> <strong id="live-session-spend">$0.00</strong> / $2.00</div>
+          <div class="live-status-item"><label for="byok-input">BYOK Key:</label> <input type="password" id="byok-input" style="padding: 3px 6px; border: 1px solid var(--dark-teal-border); border-radius: 4px; font-size: 11px;" placeholder="X-Provider-Key"></div>
+          <div class="live-status-actions">
+            <button id="btn-load-sample" class="btn-pill btn-secondary">Load Sample Workload</button>
+            <button id="btn-delete-session" class="btn-pill btn-danger">Delete My Data</button>
+          </div>
+        </div>
+
+        <div id="live-notices-bar" class="live-notices-container"></div>
+
+        <div class="live-provenance-legend">
+          <span class="prov-badge prov-user">USER_INPUT</span>
+          <span class="prov-badge prov-live">MEASURED_LIVE</span>
+          <span class="prov-badge prov-benchmark">MEASURED_BENCHMARK</span>
+          <span class="prov-badge prov-fitted">FITTED</span>
+          <span class="prov-badge prov-assumed">ASSUMED</span>
+          <span class="prov-badge prov-sim">SIMULATED</span>
+        </div>
+
+        <div class="live-grid-layout">
+          <div class="live-card live-input-card">
+            <h3 class="card-title">1. Procurement Inputs</h3>
+
+            <div class="input-group">
+              <label class="input-label">Historical Token Usage (CSV or Daily Averages)</label>
+              <textarea id="input-usage-csv" class="input-textarea" rows="4" placeholder="date,total_tokens&#10;2026-01-01,1200000&#10;..."></textarea>
+              <button id="btn-parse-usage" class="btn-small btn-secondary" style="margin-top:4px;">Parse Usage CSV</button>
+              <div id="usage-mapping-preview" class="parsed-preview-box" style="display:none; margin-top:6px;"></div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Workload Evaluation Prompts</label>
+              <textarea id="input-prompts-text" class="input-textarea" rows="4" placeholder="Enter production prompts, one per line..."></textarea>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Incumbent & Candidate Models</label>
+              <select id="select-incumbent-model" class="input-select">
+                <option value="openai/gpt-4o">OpenAI GPT-4o ($5.00 / M)</option>
+                <option value="anthropic/claude-3.5-sonnet">Anthropic Claude 3.5 Sonnet ($3.00 / M)</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Natural Language Constraints</label>
+              <textarea id="input-constraints-text" class="input-textarea" rows="3" placeholder="e.g. Budget cannot exceed $50,000. Must exclude Anthropic. Require secondary resale."></textarea>
+              <button id="btn-parse-constraints" class="btn-small btn-secondary">Extract Constraints</button>
+              <div id="parsed-constraints-preview" class="parsed-preview-box"></div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Provider Quote Text / Email</label>
+              <textarea id="input-quotes-text" class="input-textarea" rows="3" placeholder="Paste vendor email with discount offers, term sheets, or commitments..."></textarea>
+              <button id="btn-parse-quotes" class="btn-small btn-secondary">Parse Quotes</button>
+              <div id="parsed-quotes-preview" class="parsed-preview-box"></div>
+            </div>
+
+            <div id="confirm-estimate-wrapper" style="display:none; margin-bottom: 8px; font-size: 12px; color: var(--accent-coral);">
+              <label><input type="checkbox" id="check-confirm-estimate"> Confirm spend above $0.50 threshold</label>
+            </div>
+
+            <div class="live-action-row">
+              <button id="btn-estimate-run" class="btn-pill btn-secondary">Estimate Run</button>
+              <button id="btn-trigger-run" class="btn-pill btn-primary">Run Live Decision Pipeline</button>
+            </div>
+            <div id="estimate-output-box" class="estimate-box"></div>
+          </div>
+
+          <div class="live-card live-output-card">
+            <div class="scorecard-header-row">
+              <h3 class="card-title scorecard-title-text">2. Quantitative Decision Scorecard</h3>
+              <div class="scorecard-view-actions">
+                <span id="active-views-badge" class="views-count-badge">Showing 13/13</span>
+                <button id="btn-open-side-slide" class="btn-small btn-secondary" type="button">◧ Choose Data Views</button>
+              </div>
+            </div>
+
+            <div id="live-timeline" class="live-timeline-container">
+              <span class="timeline-step" id="step-ingest">Ingest</span>
+              <span class="timeline-step" id="step-workload">Workload</span>
+              <span class="timeline-step" id="step-substitutability" title="Substitutability">Substit.</span>
+              <span class="timeline-step" id="step-forecast">Forecast</span>
+              <span class="timeline-step" id="step-sizing">Sizing</span>
+              <span class="timeline-step" id="step-valuation">Valuation</span>
+              <span class="timeline-step" id="step-quotes">Quotes</span>
+              <span class="timeline-step" id="step-exit">Exit</span>
+              <span class="timeline-step" id="step-planner">Planner</span>
+              <span class="timeline-step" id="step-rfq">RFQ</span>
+              <span class="timeline-step" id="step-narrative">Narrative</span>
+            </div>
+
+            <div id="narrative-output-box" class="narrative-box">
+              <div class="narrative-title">Executive Summary</div>
+              <p id="narrative-text" class="narrative-content">No run completed yet. Click 'Run Live Decision Pipeline' or 'Load Sample Workload'.</p>
+              <div id="narrative-quantity-inspector" style="display:none; margin-top:8px; padding:6px; background:rgba(74,97,99,0.08); border-radius:4px; font-size:11px;"></div>
+            </div>
+
+            <div class="sub-table-group" id="posterior-chart-group">
+              <h4 class="table-group-title" id="posterior-chart-title">Is it safe to switch? (Awaiting stream...)</h4>
+              <div id="posterior-chart-container" style="min-height: 220px; width: 100%; margin: 8px 0;"></div>
+              <table id="posterior-data-table" class="live-table" style="margin-top: 8px;">
+                <thead>
+                  <tr>
+                    <th>Prompts (n)</th>
+                    <th>Successes</th>
+                    <th>Posterior Mean</th>
+                    <th>90% Interval</th>
+                    <th>P(Safe)</th>
+                    <th>Cumulative Cost</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-posterior">
+                  <tr><td colspan="6" class="text-muted">Awaiting stream...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sub-table-group" id="substitutability-group">
+              <h4 class="table-group-title">Model Substitutability Scorecard</h4>
+              <table id="table-substitutability" class="live-table">
+                <thead>
+                  <tr>
+                    <th>Candidate Model</th>
+                    <th>Mean Score</th>
+                    <th>Cost / Task</th>
+                    <th>Decision</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-substitutability">
+                  <tr><td colspan="4" class="text-muted">Awaiting pipeline run...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sub-table-group" id="prompts-group">
+              <h4 class="table-group-title">Evaluated Prompts &amp; Evidence</h4>
+              <table id="table-evidence-prompts" class="live-table">
+                <thead>
+                  <tr>
+                    <th>Prompt #</th>
+                    <th>Prompt Snippet</th>
+                    <th>Candidate Model</th>
+                    <th>Score / Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-evidence-prompts">
+                  <tr><td colspan="5" class="text-muted">No prompts evaluated yet.</td></tr>
+                </tbody>
+              </table>
+              <div id="evidence-drawer" class="evidence-drawer" style="display:none; margin-top: 12px; padding: 12px; background: rgba(74, 97, 99, 0.05); border: 1px solid rgba(74, 97, 99, 0.15); border-radius: 4px;">
+                <h5 style="margin-bottom: 8px;">Prompt Evidence Inspection: Prompt #<span id="evidence-prompt-id"></span></h5>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                  <div>
+                    <h6>Incumbent Output</h6>
+                    <pre id="evidence-incumbent-output" style="white-space: pre-wrap; font-size: 11px; max-height: 140px; overflow-y: auto; background: #fff; padding: 6px; border: 1px solid #ccc;"></pre>
+                  </div>
+                  <div>
+                    <h6>Candidate Output</h6>
+                    <pre id="evidence-candidate-output" style="white-space: pre-wrap; font-size: 11px; max-height: 140px; overflow-y: auto; background: #fff; padding: 6px; border: 1px solid #ccc;"></pre>
+                  </div>
+                </div>
+                <div id="evidence-verdicts-box" style="font-size: 12px; margin-bottom: 8px;"></div>
+                <button id="btn-close-evidence" class="btn-small btn-secondary">Close Evidence Drawer</button>
+              </div>
+            </div>
+
+            <div class="sub-table-group" id="sizing-group">
+              <h4 class="table-group-title">Optimal Sizing Q* & Valuation</h4>
+              <div class="metrics-grid">
+                <div class="metric-tile">
+                  <div class="tile-label">Optimal Sizing Q*</div>
+                  <div id="val-q-star" class="tile-value">-</div>
+                  <div class="tile-prov"><span class="prov-badge prov-fitted">FITTED</span></div>
+                </div>
+                <div class="metric-tile">
+                  <div class="tile-label">Reservation Discount</div>
+                  <div id="val-res-discount" class="tile-value">-</div>
+                  <div class="tile-prov"><span class="prov-badge prov-sim">SIMULATED</span></div>
+                </div>
+                <div class="metric-tile">
+                  <div class="tile-label">Expected Net Saving</div>
+                  <div id="val-expected-saving" class="tile-value">-</div>
+                  <div class="tile-prov"><span class="prov-badge prov-fitted">FITTED</span></div>
+                </div>
+                <div class="metric-tile">
+                  <div class="tile-label">Critical Ratio</div>
+                  <div id="val-critical-ratio" class="tile-value">-</div>
+                  <div class="tile-prov"><span class="prov-badge prov-fitted">FITTED</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sub-table-group" id="reservation-prices-group">
+              <h4 class="table-group-title">Catalog Reservation Prices</h4>
+              <table id="table-reservation-prices" class="live-table">
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Tenor</th>
+                    <th>Initial Spot</th>
+                    <th>Do not sign below this discount, under these assumptions.</th>
+                    <th>Monte Carlo SE</th>
+                    <th>Provenance</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-reservation-prices">
+                  <tr><td colspan="6" class="text-muted">Awaiting reservation calculation...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sub-table-group" id="quotes-rank-group">
+              <h4 class="table-group-title">Risk-Adjusted Quote Rankings</h4>
+              <table id="table-quotes-rank" class="live-table">
+                <thead>
+                  <tr>
+                    <th>Quote ID</th>
+                    <th>Provider</th>
+                    <th>Model</th>
+                    <th>Saving (Expected)</th>
+                    <th>Risk-Adjusted Saving</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-quotes-rank">
+                  <tr><td colspan="5" class="text-muted">No quotes ranked yet.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sub-table-group" id="waterfall-chart-group">
+              <h4 class="table-group-title" id="waterfall-chart-title">Where does the headline discount go? (Awaiting run)</h4>
+              <div id="waterfall-chart-container" style="min-height: 220px; width: 100%; margin: 8px 0;"></div>
+              <div class="text-muted" style="font-size: 11px; margin: 4px 0 8px 0;">Order of steps changes the bars; /explain gives the order-free Shapley attribution.</div>
+              <table id="table-waterfall" class="live-table waterfall-data-table">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Decomposition Component</th>
+                    <th>Share of Baseline Spend</th>
+                    <th>Value (USD)</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-waterfall">
+                  <tr><td colspan="4" class="text-muted">Awaiting valuation run...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sub-table-group" id="exit-chart-group">
+              <h4 class="table-group-title" id="exit-chart-title">How much does resale flexibility recover?</h4>
+              <div id="exit-chart-container" style="min-height: 220px; width: 100%; margin: 8px 0;"></div>
+              <table id="table-exit-recovery" class="live-table">
+                <thead>
+                  <tr>
+                    <th>Mechanism</th>
+                    <th>Expected Recovery (P50)</th>
+                    <th>P10 - P90 Band</th>
+                    <th>Spread / Lift</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-exit-recovery">
+                  <tr><td colspan="4" class="text-muted">Awaiting exit recovery calculation...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sub-table-group" id="agent-trace-group">
+              <h4 class="table-group-title">Agent Execution Trace</h4>
+              <div id="agent-trace-container" class="agent-trace-box" style="max-height: 180px; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 8px; font-family: monospace; font-size: 12px;">
+                <div class="text-muted">Awaiting agent execution events...</div>
+              </div>
+            </div>
+
+            <div class="sub-table-group" id="planner-group">
+              <h4 class="table-group-title">Optimal Commitment Plan</h4>
+              <table id="table-planner" class="live-table">
+                <thead>
+                  <tr>
+                    <th>Option</th>
+                    <th>Model</th>
+                    <th>Allocation</th>
+                    <th>Spend</th>
+                    <th>Saving</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-planner">
+                  <tr><td colspan="5" class="text-muted">Awaiting planner optimization...</td></tr>
+                </tbody>
+              </table>
+              <div id="rejected-options-list" class="rejected-box"></div>
+            </div>
+
+            <div class="sub-table-group" id="rfq-group">
+              <h4 class="table-group-title">Structured RFQ Term Sheet</h4>
+              <textarea id="rfq-email-preview" class="rfq-preview-textarea" readonly rows="5"></textarea>
+              <button id="btn-copy-rfq" class="btn-small btn-secondary">Copy RFQ Email</button>
+            </div>
+
+            <div class="sub-table-group whatif-panel" id="whatif-group">
+              <h4 class="table-group-title">Quantitative What-If Recompute</h4>
+              <div class="whatif-controls-grid">
+                <div class="whatif-ctrl">
+                  <label>Growth Multiplier</label>
+                  <input type="number" id="whatif-growth" step="0.05" value="1.0" min="0.5" max="3.0">
+                </div>
+                <div class="whatif-ctrl">
+                  <label>Risk Aversion (rho)</label>
+                  <input type="number" id="whatif-rho" step="0.05" value="0.5" min="0.0" max="2.0">
+                </div>
+                <div class="whatif-ctrl">
+                  <label>Successor Launch (Days)</label>
+                  <input type="number" id="whatif-successor" step="5" value="60" min="10" max="365">
+                </div>
+              </div>
+              <button id="btn-run-whatif" class="btn-small btn-primary">Recompute What-If</button>
+              <span id="whatif-latency-indicator" class="whatif-latency"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="vision-ripple" class="vision-ripple-section" style="position: relative; width: 100%; min-height: 400px; background-color: #f5f5f0; border-top: 1px solid #4a616330; border-bottom: 1px solid #4a616330; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+      <div class="vision-ripple-container" id="scene" style="position: relative; width: 100%; height: 400px; display: flex; justify-content: center; align-items: center; cursor: crosshair;">
+        <canvas id="canvas" class="vision-ripple-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+        <div class="vision-ripple-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -46%); z-index: 10; text-align: center; color: #3e4c56; pointer-events: none; width: 100%; padding: 0 1rem; box-sizing: border-box;">
+          <span class="vision-ripple-eyebrow" style="font-family: monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #3e4c56; opacity: 0.55; margin-bottom: 22px; display: block;">Where this goes</span>
+          <h1 class="vision-ripple-title" style="font-size: clamp(28px, 4.5vw, 52px); font-weight: 400; line-height: 1.2; margin: 0; letter-spacing: -1px; font-family: 'Georgia', serif; color: #3e4c56;">My vision: <em style="font-style: italic; font-family: 'Times New Roman', serif;">get internship at touchmark</em></h1>
+        </div>
+      </div>
+    </section>
+
+    <div id="side-slide-backdrop" class="side-slide-backdrop"></div>
+    <aside id="scorecard-side-slide" class="scorecard-side-slide" aria-label="Scorecard Data Views">
+      <div class="side-slide-header">
+        <div>
+          <h4 class="side-slide-title">Scorecard Data Views</h4>
+          <span class="side-slide-subtitle">Choose which data to show</span>
+        </div>
+        <button id="btn-close-side-slide" class="btn-slide-close" type="button" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="side-slide-presets">
+        <span class="preset-label">Presets:</span>
+        <div class="preset-pill-row">
+          <button type="button" class="btn-preset-pill active" data-preset="all">All Data</button>
+          <button type="button" class="btn-preset-pill" data-preset="executive">Executive</button>
+          <button type="button" class="btn-preset-pill" data-preset="valuation">Valuation &amp; Exit</button>
+          <button type="button" class="btn-preset-pill" data-preset="safety">Model Safety</button>
+        </div>
+      </div>
+
+      <div class="side-slide-list" id="side-slide-checkboxes">
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="narrative-output-box" checked>
+            <span>Executive Summary</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="narrative-output-box">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="posterior-chart-group" checked>
+            <span>Safe to Switch (Posterior)</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="posterior-chart-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="substitutability-group" checked>
+            <span>Model Substitutability</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="substitutability-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="prompts-group" checked>
+            <span>Evaluated Prompts &amp; Evidence</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="prompts-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="sizing-group" checked>
+            <span>Optimal Sizing Q* &amp; Valuation</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="sizing-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="reservation-prices-group" checked>
+            <span>Catalog Reservation Prices</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="reservation-prices-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="quotes-rank-group" checked>
+            <span>Risk-Adjusted Quote Rankings</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="quotes-rank-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="waterfall-chart-group" checked>
+            <span>Discount Waterfall</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="waterfall-chart-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="exit-chart-group" checked>
+            <span>Resale Exit Recovery</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="exit-chart-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="agent-trace-group" checked>
+            <span>Agent Execution Trace</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="agent-trace-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="planner-group" checked>
+            <span>Optimal Commitment Plan</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="planner-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="rfq-group" checked>
+            <span>Structured RFQ Term Sheet</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="rfq-group">Only</button>
+        </div>
+        <div class="side-slide-item">
+          <label class="side-slide-label">
+            <input type="checkbox" class="view-toggle-cb" data-target="whatif-group" checked>
+            <span>Quantitative What-If Recompute</span>
+          </label>
+          <button type="button" class="btn-solo-view" data-target="whatif-group">Only</button>
+        </div>
+      </div>
+
+      <div class="side-slide-footer">
+        <button id="btn-slide-select-all" class="btn-small btn-secondary" type="button">Select All</button>
+        <button id="btn-slide-apply" class="btn-small btn-primary" type="button">Apply Views</button>
+      </div>
+    </aside>
+    <button id="btn-floating-side-slide" class="floating-side-slide-trigger" type="button" title="Choose which data to show">◧ Data Views</button>
   </main>
 
   <footer class="site-footer">
@@ -592,6 +1057,6 @@
     </div>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

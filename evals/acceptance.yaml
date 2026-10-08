@@ -1,0 +1,84 @@
+C1:
+  name: safety_rails_cap_kill_byok
+  description: Safety rails refuse over-cap runs, respect kill switch, and protect BYOK key
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C2:
+  name: sequential_test_budget_and_decision
+  description: Sequential test stops within budget and matches benchmark decision
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C3:
+  name: verifiers_six_types
+  description: Verifiers run correctly across all six types including json schema and unicode
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C4:
+  name: reservation_prices_monotonicity_and_consistency
+  description: Reservation prices are monotonic in tenor and satisfy zero-saving consistency
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C5:
+  name: quote_parser_and_ranking
+  description: Quote parser rejects invalid discounts, extracts quotes, and ranks accurately
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C6:
+  name: waterfall_exact_sum
+  description: Waterfall telescoping decomposition sums to full valuation with zero residual
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C7:
+  name: svg_charts_rendering_and_tables
+  description: SVG charts render with matching data tables and answering titles
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C8:
+  name: constraint_extraction_f1_and_evidence
+  description: Constraint extraction achieves field-level F1 >= 0.90 and 1.0 evidence quote presence
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C9:
+  name: ingestion_silent_wrong_accept_and_success
+  description: Ingestion fallback achieves zero silent-wrong-accept and >= 0.90 parse success on held-out set
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C10:
+  name: narrative_and_rfq_grounding_zero_hallucinations
+  description: Across 30 sessions ungrounded numeric tokens equals 0 with 2% relative tolerance
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C11:
+  name: planner_hard_constraint_satisfaction
+  description: Hard-constraint violations in plans equal 0 across 200 random scenarios
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C12:
+  name: agent_read_only_and_injection_resilience
+  description: Agent tools are strictly read-only and untrusted injection strings in notes or inputs cannot execute unauthorized tools or bypass plan constraints
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C13:
+  name: agent_tool_loop_and_solver_stands_rule
+  description: Agent respects tool call cap <= 12 with streamed step events and solver-stands rule holds across underperformance, constraint violation, and no-key fallbacks
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio
+C14:
+  name: exit_route_paired_draws_monotonicity
+  description: Exit route paired draws guarantee R_sub >= R_same when feasible, exact equality when infeasible, with bootstrap 90% CI on difference and simulated notice
+  target_direction: ge
+  threshold: 1.0
+  unit: ratio

@@ -15,11 +15,16 @@ def collect_ground_truth_numbers(data: Any) -> Set[float]:
     collected = set()
     if isinstance(data, (int, float)):
         val = float(data)
+        collected.add(val)
+        collected.add(round(val, 6))
         collected.add(round(val, 4))
         collected.add(round(val, 2))
         collected.add(round(val * 100.0, 2))
         collected.add(round(val * 100.0, 1))
         collected.add(float(int(val)))
+    elif isinstance(data, str):
+        for num, _ in extract_numbers_from_text(data):
+            collected.add(num)
     elif isinstance(data, dict):
         for v in data.values():
             collected.update(collect_ground_truth_numbers(v))

@@ -211,11 +211,43 @@ def run_300_item_judge_validation(
     pe = (p_cand_pred * p_cand_gold) + (p_tie_pred * p_tie_gold) + (p_inc_pred * p_inc_gold)
     kappa = (po - pe) / max(1e-6, 1.0 - pe)
 
+    sens_succ = sum(1 for p, g in zip(verdicts_a_first, ground_truth) if g >= 0 and p >= 0)
+    sens_tot = sum(1 for g in ground_truth if g >= 0)
+    sens_fail = sens_tot - sens_succ
+    spec_succ = sum(1 for p, g in zip(verdicts_a_first, ground_truth) if g < 0 and p < 0)
+    spec_tot = sum(1 for g in ground_truth if g < 0)
+    spec_fail = spec_tot - spec_succ
+    sens_rate = float(sens_succ / max(1, sens_tot))
+    spec_rate = float(spec_succ / max(1, spec_tot))
+    youden_j = float(sens_rate + spec_rate - 1.0)
+
+    operating_chars = {
+        judge_model: {
+            "sensitivity": {
+                "successes": sens_succ,
+                "failures": sens_fail,
+                "total": sens_tot,
+                "rate": round(sens_rate, 4),
+                "beta_posterior": {"alpha": 1 + sens_succ, "beta": 1 + sens_fail}
+            },
+            "specificity": {
+                "successes": spec_succ,
+                "failures": spec_fail,
+                "total": spec_tot,
+                "rate": round(spec_rate, 4),
+                "beta_posterior": {"alpha": 1 + spec_succ, "beta": 1 + spec_fail}
+            },
+            "youden_j": round(youden_j, 4)
+        }
+    }
+    write_json_atomic(Path("artifacts/judge_operating_characteristics.json"), operating_chars)
+
     return {
         "num_items": num_items,
         "judge_model": judge_model,
         "cohens_kappa": round(float(kappa), 4),
         "flip_rate": round(float(flip_rate), 4),
+        "operating_characteristics": operating_chars[judge_model],
         "items": items_record
     }
 

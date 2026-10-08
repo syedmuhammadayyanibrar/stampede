@@ -82,6 +82,19 @@ def test_no_comments_or_docstrings_in_repo() -> None:
         if violations:
             line_violations[str(env_ex.relative_to(root))] = violations
 
+    web_dir = root / "web"
+    if web_dir.exists():
+        for path in web_dir.rglob("*"):
+            if path.is_file() and path.suffix in (".js", ".css", ".html") and not path.name.endswith(".min.js"):
+                lines = path.read_text(encoding="utf-8", errors="ignore").splitlines()
+                web_v = []
+                for idx, line in enumerate(lines, start=1):
+                    s = line.strip()
+                    if s.startswith("//") or s.startswith("/*") or s.startswith("<!--"):
+                        web_v.append(f"Line {idx}: {s}")
+                if web_v:
+                    line_violations[str(path.relative_to(root))] = web_v
+
     error_messages = []
     if py_violations:
         for file_path, details in py_violations.items():

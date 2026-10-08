@@ -11,3 +11,5 @@ dist/
 build/
 *.egg-info/
 scratch/
+data/*.db
+data/eval_scratch/

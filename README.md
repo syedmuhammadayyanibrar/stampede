@@ -1,4 +1,4 @@
-# Touchmark Forward Capacity Pricing, Liquidity Risk & Contract Copilot
+# Stampede: Live AI Inference Capacity Pricing & Secondary Valuation Engine
 
 > **IMPORTANT FRAMING — PLEASE READ:**  
 > This project is a quantitative market-risk simulation and contract sizing engine built for forward capacity markets in AI tokens. It is grounded in empirical public data (21+ months of OpenRouter daily token traffic rankings, official model release dates, and public API price-cut history). It does **not** use Touchmark's internal order book or proprietary trading data. It demonstrates a rigorous risk-engineering methodology and evaluates the liquidity-crunch hypothesis under explicit, documented assumptions. It does not and cannot prove this occurs in Touchmark's live production market.
@@ -11,7 +11,7 @@ Touchmark operates a forward market for AI inference capacity: buyers lock in a 
 
 This project is tailored specifically for Touchmark's founding engineering team:
 - **Ilia Bolgov** (ex-Revolut product manager): Focus on capital efficiency, enterprise buyer procurement friction, secondary marketplace mechanics, and structured capacity conversion.
-- **Roman Yanushevskyi** (2x Citadel quant research intern, IOI gold medalist, ex-Lovable AI engineer): Focus on microstructural liquidity modeling, jump-diffusion stochastic processes, market impact laws ($s = s_{\text{base}} + \kappa (\Delta V / V_{\text{daily}})^\alpha$), newsvendor optimization under asymmetric secondary salvage, and zero-hallucination number grounding.
+- **Roman Yanushevskyi** (2x Citadel quant research intern, IOI gold medalist, ex-Lovable AI engineer): Focus on microstructural liquidity modeling, jump-diffusion stochastic processes, market impact laws ($s = s_{\text{base}} + \kappa (\Delta V / V_{\text{daily}})^\alpha$), newsvendor optimization under asymmetric secondary salvage, and numeric grounding check: every number in generated text must match a computed value within 2 percent; it does not verify non-numeric claims.
 
 ### Core Quantitative Question
 Touchmark's resale promise is straightforward to keep when resale demand is **idiosyncratic** (individual buyers adjusting allocations for unrelated reasons). Does it hold up when resale demand is **correlated**—specifically, when a frontier model launches and a wave of buyers holding contracts on the now-superseded incumbent all attempt to liquidate simultaneously?
@@ -69,7 +69,7 @@ flowchart LR
     I --> J["Audited Contract Ticket"]
 ```
 
-1. **Deterministic CSV Parser (`copilot/parser.py`):** Automatically detects headers, date stamps, and token volumes across OpenAI, Anthropic, and OpenRouter usage export formats without heuristic hallucination risk.
+1. **Deterministic CSV Parser (`copilot/parser.py`):** Automatically detects headers, date stamps, and token volumes across OpenAI, Anthropic, and OpenRouter usage export formats without heuristic error or ungrounded extrapolation risk.
 2. **Plan Extractor (`copilot/plans.py`):** Extracts forward volume changes from engineering milestone notes, enforcing that every event contains a verified exact substring quotation from source text.
 3. **Log-Drift Monte Carlo Forecaster (`copilot/forecast.py`):** Estimates drift and volatility over historical token consumption, generates 5,000 residual-bootstrapped scenario paths over 90 days, and applies milestone multipliers.
 4. **Newsvendor Optimizer & Portfolio Structuring (`copilot/sizing.py`):**
@@ -78,7 +78,7 @@ flowchart LR
    - Structures orders into a **70/30 Protected Portfolio**: 70% Specific-Model Core (lowest forward strike) + 30% Dynamic Best-in-Class Hedge (automatically rolls to new frontier releases).
 5. **Wilson CI Task Fit-Check (`copilot/fit_check.py`):** Evaluates enterprise prompts for suitability on discounted tiers with rigorous Wilson score confidence intervals:
    $$w = \frac{\hat{p} + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$$
-6. **Number Grounding Guard (`copilot/explain.py`):** Parses every single numeric token in generated copilot commentaries, verifying within 2% relative tolerance that every figure exists in upstream mathematical outputs.
+6. **Numeric Grounding Guard (`copilot/explain.py`):** Parses every single numeric token in generated copilot commentaries, verifying within 2% relative tolerance that every figure exists in upstream mathematical outputs. The numeric grounding check verifies numeric figures within a 2 percent relative tolerance of computed values; it does not verify non-numeric factual claims.
 
 ---
 
@@ -90,7 +90,7 @@ All quantitative and AI components are audited via an automated evaluation harne
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CSV Parser** | Header mapping accuracy | **100.0%** | Fuzzy string match (75.0%) | $\ge 85.0\%$ | **PASS** |
 | **Plan Extractor** | Event recall | **100.0%** | Regex keyword (60.0%) | $\ge 75.0\%$ | **PASS** |
-| **Hallucination Guard** | Unverified quotes | **0.0%** | No check (25.0% unverified) | $\le 5.0\%$ | **PASS** |
+| **Quote Evidence Guard** | Unverified quotes | **0.0%** | No check (25.0% unverified) | $\le 5.0\%$ | **PASS** |
 | **Sizing Engine** | Outperformance vs P90 Heuristic | **+4.45%** | P90 Peak Heuristic (0.0%) | $\ge 3.0\%$ | **PASS** |
 | **Number Grounding** | Detection fidelity | **100.0%** | Blind generation (no check) | $\ge 90.0\%$ | **PASS** |
 
@@ -217,19 +217,21 @@ stampede/
 
 ---
 
-## 8. Parity: Autonomous Quantitative Extensions
+## 8. Measurement Architecture & Underlying Benchmark Library
+ 
+The internal package parity/ retains its name as the measurement and benchmark library.
 
 "Parity" (`parity/`) extends the Stampede forward token pricing architecture into a 6-module quantitative framework solving the fundamental valuation, substitutability, resale, and procurement problems for AI compute.
-
+ 
 ### The Six Modules
 1. **Substitutability Engine (`parity/substitutability/`):** Sequential Bayesian estimation of non-inferiority between candidate and incumbent models across 8 workload archetypes with automated early stopping, programmatic task verifiers, and effective cost per acceptable task ($C^*$).
 2. **Obsolescence & Price-Path Model (`parity/obsolescence/`):** Parametric Weibull and exponential hazard models fitted on 23 source-verified historical events across 6 distinct providers, coupled with Poisson jump-diffusion price-path forecasting backtested walk-forward.
 3. **Contract Valuation (`parity/valuation/`):** Longstaff-Schwartz American resale option pricing with degree-2 polynomial regression, 16-subset exact Shapley risk premium attribution (drift, volatility, hazard, illiquidity), and analytical ZOPA width contraction bounds.
-4. **Resale Clearing Auction (`parity/clearing/`):** Uniform-price double auction matching buyers and sellers across substitutable capacity classes, guaranteeing 100% envy-freeness and a 4.0x market welfare uplift over isolated model trading.
+4. **Resale Clearing Auction (`parity/clearing/`):** Uniform-price double auction matching buyers and sellers across substitutable capacity classes, clearing substitutable capacity classes with an empirical 1.18x market welfare uplift over isolated model trading.
 5. **Seller Utilization Benefit (`parity/seller/`):** Capacity absorption and conversion option par-value rollover model with cannibalization dampening (0.80), yielding a 45.0% secondary market spread compression at 50% conversion uptake.
-6. **Procurement Agent (`parity/agent/`):** Constraint-satisfying ticket optimizer (100% spend ceiling compliance, $\le 50\%$ provider concentration cap) outperforming naive baselines by 33.6%, reinforced with a content-aware corrupted CSV parser (100% recovery) and a zero-hallucination numeric grounding guard (100% precision).
-
-### Running the Parity Evaluation Harness
+6. **Procurement Solver (`parity/agent/`):** Constraint-satisfying ticket optimizer (100% spend ceiling compliance, $\le 50\%$ provider concentration cap) outperforming naive baselines by 33.6%, reinforced with a content-aware corrupted CSV parser and a numeric grounding check: every number in generated text must match a computed value within 2 percent; it does not verify non-numeric claims.
+ 
+### Running the Benchmark Evaluation Harness
 ```bash
 python eval.py
 ```

@@ -1,6 +1,6 @@
 import numpy as np
 from dataclasses import dataclass
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 from .plans import PlanEvent
 
 @dataclass
@@ -21,9 +21,9 @@ def generate_demand_forecast(
     plan_events: List[PlanEvent],
     horizon_days: int = 90,
     num_scenarios: int = 5000,
-    random_seed: int = 42
+    random_seed: int = 42,
+    random_draws: Optional[Any] = None
 ) -> ForecastResult:
-    rng = np.random.default_rng(random_seed)
     hist = np.array(historical_daily_m, dtype=np.float64)
     if len(hist) < 3:
         hist = np.array([1.0, 1.05, 1.02, 1.08, 1.12], dtype=np.float64)
@@ -42,7 +42,11 @@ def generate_demand_forecast(
         eff_mult = 1.0 + ev.confidence * (ev.demand_multiplier - 1.0)
         event_multipliers[start_day:] *= eff_mult
         
-    z = rng.standard_normal(size=(num_scenarios, horizon_days))
+    if random_draws is not None and hasattr(random_draws, "get_demand_draws"):
+        z = random_draws.get_demand_draws(num_scenarios, horizon_days)
+    else:
+        rng = np.random.default_rng(random_seed)
+        z = rng.standard_normal(size=(num_scenarios, horizon_days))
     daily_increments = mean_drift + (std_drift * z)
     
     cum_increments = np.cumsum(daily_increments, axis=1)

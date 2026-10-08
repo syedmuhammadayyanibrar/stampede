@@ -1,0 +1,249 @@
+<USER_REQUEST>
+ROLE AND OPERATING RULES
+
+You are a senior quant, ML and backend engineer. The repository c:\stampede already contains: the v1 engine (engine.py, models.py, liquidity.py, copilot/, migration.py, server.py, web/), and the internal measurement library parity/ (substitution, obsolescence, valuation, market, seller, agent, evaluation), with 30 hash-locked gates in evals/thresholds_parity.yaml and eval.py. Your job: turn this into a LIVE product called Stampede, where a visitor supplies their own inputs and the system computes results from those inputs in real time. Work autonomously and do not ask me questions, with one exception: you may spend at most 3 USD of real model calls during development without asking. Mocks and recorded replays cover everything else. If more spend is needed, print the estimate and stop.
+
+Product name is Stampede. The word "Parity" must not appear in any user-facing string, API field name, UI text or README headline. The internal package parity/ keeps its name, and README explains that in one sentence. The new application code lives in a new package stampede/.
+
+Windows-compatible: pathlib everywhere, no shell-specific commands, entry points as python -m modules. Server stays on port 8080 and existing endpoints keep working.
+
+ABSOLUTE RULE: NO COMMENTS ANYWHERE
+No comments, docstrings, section banners, TODO or commented-out code in any authored py, yaml, toml, sql, sh, js, css, html or .env.example file. Code explains itself through names and types. Prose lives only in README.md, DEVIATIONS.md and docs/*.md. The existing tests/parity/test_no_comments.py must keep passing and be extended to cover stampede/, tests/stampede/, eval_live.py, and any js, css and html authored under web/ (excluding vendored libraries).
+
+HONESTY RULES
+- Never hardcode a result. Every number a user sees is computed in that session or carries an explicit provenance tag (below).
+- Naming rule: only a component that calls an LLM through the gateway may be called an agent, judge or model call anywhere. Deterministic components are called planner, solver, heuristic or parser. If no API key exists, an LLM-dependent feature reports SKIPPED(no_key). It never silently substitutes a deterministic version under the same name. Where a deterministic fallback legitimately exists (templated narrative, parser-only ingestion), it is labelled as such in the output.
+- The 30 existing gates, their YAML and their lock are untouched. New live gates go in evals/thresholds_live.yaml with its own sha256 lock, written before any live gate is evaluated, and checked by eval_live.py exactly as eval.py checks its lock (mismatch: flag GATES_MODIFIED_AFTER_LOCK, exit code 3).
+- After the first full eval_live run, only bug fixes are allowed. Never change gates, fixtures or scorers to improve a result. Log every post-eval fix in DEVIATIONS.md with before and after numbers.
+- Anything simulated is labelled SIMULATED. Your final message copies every number from reports/live_eval_results.json by script, never from memory.
+
+WHAT STAMPEDE DOES
+
+A buyer of inference capacity brings usage data, their own prompts, constraints in plain English and real quotes they have received. Stampede answers four questions with their data, live:
+1. Can a cheaper model do my work? Real model calls on my prompts, a sequential Bayesian test shown live, and cost per acceptable task from measured tokens.
+2. What is this quote really worth? Parity-adjusted discount, net of expected deflation, prepay financing, shutdown exposure and resale value, with an expected saving and its uncertainty.
+3. What should I buy? Sizing, a reservation price per model and tenor (the discount below which not to sign), a plan that respects my constraints, and an RFQ I can send.
+4. How do I get out? If I must sell on day t, or a successor model launches, what do I recover?
+
+Fast versus slow is the architecture. Model calls are slow and cost money, so they happen once per run (the parity stage). Everything else is fast math on stored posteriors, forecast residuals and fixed random draws, so every what-if recomputes in about a second without new model calls.
+
+A small provider-side view (Phase 5) shows the utilization uplift band for a seller's own capacity and demand parameters.
+
+Cut from the demo: precomputed JSON as demo data, static fan charts, stress-scenario cards, the five-mechanism benchmark (stays in eval.py), any multi-turn evaluator, any feature that cannot change when the user changes an input.
+
+PHASE 0: AUDIT AND RECONCILE
+
+1. If the repo has no git history, run git init and commit a baseline so diffs are provable.
+2. Run pytest, python run_evals.py and python eval.py --fast --offline. Record the results.
+3. Write docs/spec_compliance.md: one row per Parity module (1 to 6) and per gate G01 to G30 with status IMPLEMENTED, PARTIAL, REPLACED or MISSING, the file path and the proving command. Fix cheap gaps. Log expensive ones in DEVIATIONS.md. Live features that depend on a MISSING piece build the minimal version of it and log a DEV entry.
+4. Required infrastructure changes to parity/ (additive, existing tests keep passing):
+   a. Gateway: add cache_scope in {"disk", "session"} and persist_outputs bool. User prompts and their outputs use cache_scope="session": held in an in-memory dict owned by the session, never written to disk and never logged. Benchmark and sample calls keep the disk cache.
+   b. Judge operating characteristics: from the Module 1 judge-validation run (300 verifiable items), persist artifacts/judge_operating_characteristics.json with, per judge pipeline: sensitivity and specificity counts (true non-inferior called non-inferior, true inferior called inferior), Beta(1+successes, 1+failures) posteriors, and the Youden index J = sens + spec - 1. If the validation outputs are not cached and no key exists, record SKIPPED and keep going.
+   c. Every random component used by valuation (price chains, demand paths, plan-change shocks, event times) must take a pre-generated RandomDraws object (normals, uniforms, Poisson counts) instead of seeding internally, so draws can be reused across recomputes. Existing seeded behaviour for eval.py must reproduce its previous outputs exactly (hash-compare).
+5. Phase 0 exit: pytest and run_evals.py pass, and existing eval.py --fast artifacts are byte-identical to before the infrastructure changes.
+
+STAMPEDE PACKAGE LAYOUT
+
+stampede/
+  types.py, settings.py, sessions.py, costs.py, events.py, orchestrator.py, whatif.py, explain.py, agent_live.py, sample.py
+  stages/ ingest.py, forecast.py, workload.py, parity_live.py, judge_adjust.py, quotes_parse.py, quotes_rank.py, valuation_live.py, sizing_live.py, exit_route.py, seller_view.py, constraints_parse.py, planner.py, rfq.py, narrative.py
+  api/ routes.py, schemas.py, security.py
+tests/stampede/ (one test module per stage plus the cross-cutting tests below)
+tests/support/fake_models.py
+eval_live.py, evals/thresholds_live.yaml, evals/thresholds_live.lock
+docs/live_api.md, docs/live_math.md
+
+Reuse, never copy: copilot.parser, copilot.plans, copilot.forecast, copilot.sizing (sizing reworked in sizing_live.py, see below), copilot.explain grounding via parity.agent.grounding, parity.substitution.*, parity.obsolescence.*, parity.valuation.*, parity.market.*, parity.seller.*, migration.py. Check for module-name conflicts with root-level v1 files before creating stampede/.
+
+CORE TYPES (stampede/types.py)
+
+Provenance enum: USER_INPUT, MEASURED_LIVE (model calls on the user's prompts this session), MEASURED_BENCHMARK (stored benchmark results, including replayed sample), FITTED (statistical fit, always with n), ASSUMED (a configured parameter not estimated from data), SIMULATED.
+
+Quantity (pydantic): id (stable string, for example "parity.pair.2.theta"), value, lo90 and hi90 (optional), n (optional), unit, provenance, source (string naming the stage, artifact or tool call that produced it), note (optional). Every numeric leaf in every API result is a Quantity or lives inside a Series (name, unit, provenance, source, values list, optional lo and hi lists). A test walks every response model and fails on any bare float or int outside Quantity, Series, and a short allowlist of structural fields (counts of items, ports, ids, timestamps, sequence numbers).
+
+Notice: code, severity (info, warning, blocking), text. Results carry a notices list. Standing notices that must appear when applicable: simulated exit pool, assumed seller parameters, thin hazard data (with the event count), OpenRouter prices used as a proxy for provider-direct contracts, judge error rates assumed to transfer from the benchmark to the user's workload, parity is relative to the incumbent in judged mode, params_source for valuation.
+
+SESSIONS, COST, PRIVACY, SECURITY
+
+- sessions.py: in-memory SessionStore, TTL 2 hours idle, hard cap 4 hours. Session holds inputs, run records, the session cache, draws, posteriors and forecast residuals. Persist only metadata to SQLite (session id, created, cost totals, stage timings, error codes). No prompt, output, usage-row, quote text or constraint text is ever written to disk or logs.
+- DELETE /api/v1/sessions/{id} wipes everything immediately. A TTL sweeper wipes expired sessions.
+- Logging: structured, content-free. A redaction filter drops any record containing session content. Keys (BYOK) appear nowhere.
+- costs.py: CostLedger per session and a global daily ledger. Caps from env: STAMPEDE_SESSION_CAP_USD (default 2.00), STAMPEDE_DAILY_CAP_USD (default 25.00), kill switch via env STAMPEDE_KILL=1 or the existence of data/KILL. Estimator returns, per stage, expected calls, tokens and dollars with a low and high bound, from prompt token counts (use the gateway's token estimate), the maximum sequential cap per pair, judge call multiplicity and the agent's maximum calls. A run whose high estimate exceeds the remaining session cap is refused with the estimate. A run whose estimate exceeds 0.50 USD requires confirm_estimate true. BudgetExceeded mid-run ends the stage with a partial result flagged SKIPPED(budget) and keeps everything completed so far.
+- BYOK: the client may send a provider key in header X-Provider-Key per run. Held in memory for that run only, never logged, never cached, and the BYOK run uses a separate ledger that is not bound by the daily cap.
+- Rate limits: token bucket per client address (default 30 requests per minute for reads, 3 runs per hour), at most 1 active run per session and 3 globally.
+- Input limits: prompts 5 to 40 per workload, at most 8000 characters each, usage CSV at most 5 MB, at most 3 candidate models plus 1 incumbent, quote email text at most 20000 characters. Reject with clear error codes.
+- Untrusted input: user prompts, notes, quotes and constraint text may contain instructions. Judges and the agent receive them only inside delimited data blocks under a system prompt that declares them untrusted. The agent's tools are read-only over session state. Only the orchestrator triggers paid model-call stages.
+- Return a notices entry on every run that user prompts are sent to the selected model providers via OpenRouter.
+
+API CONTRACT (FastAPI router mounted at /api/v1, documented in docs/live_api.md with request and response examples and an SSE transcript)
+
+Meta:
+- GET /health. GET /models: the configured catalog (id, family, price in and out per Mtok, retrieved_on, source), restricted to ids present in the cached live listing. GET /budget: session and global spend and caps (no secrets).
+Sessions and inputs:
+- POST /sessions -> {session_id, expires_at, budget, limits, notices}
+- DELETE /sessions/{id}
+- PUT /sessions/{id}/usage: either multipart CSV, or JSON {monthly_tokens, growth_pct_per_month, daily_volatility_pct, notes, input_output_ratio}. Returns the parse report and a forecast preview.
+- PUT /sessions/{id}/workload: {prompts: [{text, checks?}], description?, input_output_ratio?}. Checks types: json_schema, regex_must_match, must_contain, must_not_contain, max_words, exact_match. POST /sessions/{id}/workload/generate {description, n}: an LLM generates a synthetic workload from a description, labelled SYNTHETIC_FROM_DESCRIPTION in the result, and the user must accept it before use.
+- PUT /sessions/{id}/constraints {text}: LLM parse to structured constraints with a verbatim evidence quote per constraint. Returns structured constraints and the unparsed remainder. PUT /sessions/{id}/constraints/structured lets the user edit and confirm.
+- POST /sessions/{id}/quotes/parse {text}: LLM extracts candidate quotes from a pasted email or term sheet, each field with a verbatim evidence quote. PUT /sessions/{id}/quotes {quotes} accepts the confirmed structured list.
+Runs:
+- POST /sessions/{id}/estimate {stages, incumbent, candidates} -> per-stage estimate.
+- POST /sessions/{id}/runs {stages, incumbent, candidates, confirm_estimate?} -> {run_id}. Stages: ingest, forecast, parity, quotes, valuation, plan, exit. Dependencies resolved by the orchestrator. Missing optional inputs skip dependent stages with an explanatory notice, never fabricated defaults.
+- GET /runs/{run_id}/events: SSE with Last-Event-ID resume. Event types: stage_started, progress, evidence, agent_step, stage_result, cost_update, warning, error, run_completed. Each carries seq, stage, timestamp and a payload. Keep the full log in memory for the run lifetime so resume replays exactly the missed events.
+- GET /runs/{run_id} -> the full result JSON.
+- GET /runs/{run_id}/evidence/{pair_index}/{prompt_index} -> both model outputs for that prompt, the judge verdicts per ordering, and any check results. Session memory only.
+- POST /runs/{run_id}/whatif {overrides} -> fast recompute, {result_delta, result, recompute_ms}.
+- POST /runs/{run_id}/refine -> rerun the fast stages with full path counts.
+- POST /runs/{run_id}/explain {target} -> exact Shapley attribution for target in {net_discount, d_min, resale_option_value} on the quote or plan given.
+- POST /seller/uplift {capacity_params, demand_params, committed_share, forecast_error} -> uplift band (no session needed, rate limited).
+Sample:
+- POST /sessions/{id}/load-sample: loads the built-in sample (below).
+Errors: a consistent envelope {error: {code, message, detail}} with codes for validation, budget, rate limit, kill switch, model unavailable and not found.
+
+STAGES AND MATH
+
+Write docs/live_math.md while building: for each stage, the formulas, units and every simplification, plus the hand-computed fixtures the tests use.
+
+ingest (stages/ingest.py)
+1. Deterministic parse with the v1 parser wrapped by the parity normalizing wrapper. Report method=deterministic and the invariant checks.
+2. If the deterministic parse fails or fails invariants, and a key exists, the LLM fallback proposes a column mapping and unit conversions as JSON (schema-validated). The mapping is applied by deterministic code, never by letting the LLM emit data rows. Invariants (all must pass or the result is rejected): dates parse and are increasing after sorting with duplicate rate below 5%; tokens non-negative; the total after mapping is within 1% of an independent re-aggregation using the mapping; at least 14 distinct days. On rejection the user gets a precise error, never a best guess. Report method=llm_mapped and show the mapping for the user to confirm.
+3. Numbers-only input (monthly tokens, growth, volatility) produces a synthetic daily series by the stated log-linear model, labelled USER_INPUT-derived and SIMULATED in its series provenance.
+
+forecast
+Reuse copilot.forecast with the session RandomDraws. Output P10, P50, P90 daily Series over the horizon (30, 60 or 90 days, user selectable) and stored residuals for what-ifs. Planned changes from notes use the v1 plan extractor, which keeps its substring-evidence rule.
+
+workload and parity (stages/workload.py, parity_live.py, judge_adjust.py)
+Mode:
+- checked: checks supplied for all prompts. Each model response scores the fraction of checks passed (0 to 1).
+- judged: otherwise.
+Candidates and incumbent come from the catalog. Incumbent outputs are generated once per prompt and reused across candidates. Order prompts by a seeded shuffle.
+Per-prompt outcome Y for candidate j versus incumbent i:
+- checked mode: Y = 1 iff score_j >= score_i - margin (margin 0 by default, user may set up to 0.1).
+- judged mode: both orderings, eligible judges are from families different from both models, two judges when available, verdict mean over (judge, ordering) in {+1, 0, -1}, Y = 0 iff mean <= -0.5. Judge prompts reuse parity.substitution.judge with rubric chosen by a short LLM archetype classifier whose output is shown to the user, who may override it. If no eligible judge exists for a pair, that pair is SKIPPED with the reason.
+Sequential test per pair: Beta(1,1) on the observed rate pi. Batches of 4 prompts, minimum 8, cap at min(prompts, config cap). Stop with parity if P(theta >= THETA0) >= 0.95, no_parity if <= 0.05, otherwise undecided at the cap. THETA0 comes from config and may be overridden by the user between 0.80 and 0.99.
+Judge-error adjustment (judged mode only): sample sens and spec from their Beta posteriors (artifact from Phase 0). Transform pi draws: theta = (pi + spec - 1) / (sens + spec - 1), clipped to [0,1]. Stopping rules operate on the adjusted posterior (Monte Carlo, 4000 draws each batch). If J < 0.5, no parity decision may be issued and the notice says why. Always report the raw and adjusted theta. Add the standing notice that judge error rates are assumed to transfer.
+Effective cost per acceptable task (measured, not estimated from list tokens):
+- tau_m = mean total tokens per task for model m on the user's prompts, with in and out tokens separately from provider-reported usage.
+- c_m = on-demand cost per task = price_in_m * tokens_in_m + price_out_m * tokens_out_m.
+- q_m: checked mode, mean score of model m. Judged mode, q_incumbent = 1 by definition (the incumbent is the quality reference) and q_candidate = adjusted theta mean. State this difference in the output notices.
+- E_m = c_m / q_m. Break-even discount d*_m = 1 - E_inc / E_m (may be negative). Bootstrap over prompts for intervals.
+Streaming: after every batch emit progress with n, successes, posterior mean and interval, P(parity) and cumulative cost. Emit an evidence event for each judged or scored prompt (indices only, no content). Pairs run in parallel across candidates, sequential within a pair.
+Store posteriors in the session so downstream stages and what-ifs never re-call models.
+
+quotes (stages/quotes_parse.py, quotes_rank.py)
+Quote schema: provider, model_id, list_price_in_per_mtok, list_price_out_per_mtok (user-supplied or from the catalog), discount_pct, tenor_days, size_tokens, prepay_pct, start_in_days, resale_allowed, resale_fee_pct, conversion in {none, par_to_successor, best_in_class}, notes.
+Email parsing: the LLM returns JSON where every populated field has a verbatim evidence_quote. A field is dropped (set to null, flagged) if the quote does not occur in the source text after whitespace normalization. Numbers in values must appear in the quote (after unit normalization). Missing fields are reported, not defaulted.
+Blended price: K_list_m = blend of in and out prices using the measured in/out token mix on the workload, else the usage CSV mix, else the user-supplied input_output_ratio (ASSUMED if the user accepted the UI default).
+Strike per token K_m = (1 - discount) * K_list_m.
+Economics, per quote m, using these definitions (document derivation and every simplification in docs/live_math.md, and test with hand-computed fixtures):
+- Reserve token consumption is limited by the task-equivalent demand: the buyer's incumbent token demand u_t converts to tasks via tau_inc, and the reserve on m can serve at most tasks_t * tau_m tokens per day.
+- Avoided spend per consumed reserve token on m = E_inc * q_m / tau_m. If m is the incumbent, q = 1 and this equals the incumbent's blended on-demand price.
+- Net saving per consumed token before financing and obsolescence = avoided spend - K_m.
+- Parity-adjusted discount vs current spend = 1 - K_m * tau_m / (E_inc * q_m).
+- Net of deflation = parity-adjusted discount minus the expected-deflation component D_m (from parity.valuation.discount over the consumption profile).
+- Prepay financing: pi paid at t0, remainder pro rata over the tenor, discounted at buyer rate r_b (config, ASSUMED unless the user sets it).
+- Expected resale and obsolescence: use the LSM valuation with the model's price chain, shutdown and notice dates from the obsolescence simulator (params_source carried through), resale fee, market depth scenario, and conversion clause mapped to the conversion fraction c (best_in_class and par_to_successor map to c=1 with the successor serving-cost ratio from config, ASSUMED). The price chain of the incumbent and of m are independent draws unless same provider and slot; state this.
+- Output per quote: headline discount, parity-adjusted discount, net of deflation (each as Quantity), expected net saving in dollars with P10 and P90, probability that saving is positive, probability of deprecation notice before expiry, expected recovery on early exit, and a ranked order by expected saving minus rho times its SD (rho is the user's risk-aversion setting, default 0.25).
+- Quotes on models not in the catalog get price-only metrics, a "parity not measured" notice, and are ranked in a separate group.
+- Reservation prices: for every (model in catalog, tenor in {30, 60, 90}) show the minimum discount at which the expected risk-adjusted saving is zero (d_min from Module 3), so users know what to refuse even before they have quotes. When the seller-side bound d_max is shown, label it ASSUMED with its scenario.
+
+valuation_live, sizing_live, exit_route
+- valuation_live wraps parity.valuation (LSM, d_min, Shapley on demand) with the session draws. Default live path counts: 4000 training and 4000 evaluation paths. refine uses 20000 each. The out-of-sample evaluation set is always independent of the training set.
+- Sizing Q* (sizing_live.py): newsvendor where the overage cost is Co = K_m - salvage (salvage = expected recovery from exit_route at the expected idle time, a Quantity SIMULATED) and the underage cost is Cu = on-demand avoided cost minus K_m. Critical ratio Cu / (Cu + Co) quantile of the forecast demand over the tenor. Compare against P90-peak and v1 sizing on the same inputs and show the expected-cost difference with intervals from the forecast draws (that is a diagnostic, not a claim of superiority).
+- exit_route: for a contract held at day t0 with remaining share r, evaluate expected recovery of remaining value if sold on day t under (a) same_model_only matching and (b) substitution-aware matching, using parity.market with the benchmark substitutability matrix as true parity (MEASURED_BENCHMARK) and the synthetic buyer pool (SIMULATED). Overrides: sell day, remaining share, depth scenario, successor launch day, price cut size. Report the recovery distribution (P10, P50, P90) for both mechanisms and the spread. The standing notice states that the pool is synthetic.
+
+WHAT-IF ENGINE (whatif.py)
+- A session creates one RandomDraws object (normals, uniforms, Poisson counts, with sizes for the live and the refine path counts) from the session seed on first use. Every recompute reuses it (common random numbers).
+- Override schema (pydantic, all optional): successor_launch_day, price_cut_pct, depth in {thin, normal, deep}, risk_aversion, conversion_fraction, growth_multiplier, plan_change_probability, excluded_providers, discount_overrides per quote id, quote edits, theta0, horizon_days, sell_day, remaining_share. Overrides that would require new model calls (changing candidates or incumbent, workload) are rejected with a message to start a new run.
+- The recompute DAG: only stages downstream of the changed inputs run. Parity posteriors, evidence and the session cache are never touched.
+- Deterministic guarantee: a what-if with no overrides reproduces the base run result exactly, and a what-if with overrides equals a from-scratch run with the same inputs and draws exactly. Both are gates.
+- Latency target: p95 of what-if recompute at the live path counts at most 2.0 seconds on the development machine (record CPU model in the report). The response always includes recompute_ms.
+
+PLAN, CONSTRAINTS, RFQ, NARRATIVE, AGENT
+
+Constraints (constraints_parse.py): structured schema: excluded_providers, allowed_models, max_spend_usd, min_parity (value, applies to all or to a named archetype), min_tenor_days, max_tenor_days, max_prepay_pct, require_resale, require_conversion, max_provider_share, start_by_days. The LLM returns JSON where every constraint has a verbatim evidence_quote that must occur in the source text. Failing constraints are dropped and listed in the unparsed remainder. The user confirms the structured form before any run uses it. Hard versus soft: anything phrased as must, never, cannot, at most is hard (the parser tags it, the user can flip it).
+
+Planner (planner.py, deterministic): options are stay-on-demand, switch-model-on-demand (only when parity decision is parity for the constrained threshold), and each parsed quote at sizes in {25, 50, 75, 100 percent of quote size, capped by Q* }. Choose the portfolio maximizing expected saving minus rho times SD subject to hard constraints (use scipy.optimize.milp). Output the plan, the options it rejected with the binding constraint for each, the comparison versus on-demand and the sizing Q*. With no quotes, the plan is the sizing plus reservation prices and an RFQ.
+
+RFQ (rfq.py): a pydantic RFQ built from the plan: workload mix and measured tokens per task, acceptable models with minimum parity and measured parity, tenor, quantity range, maximum strike per token from the reservation price, resale clause required, conversion clause required, delivery profile from the forecast, evaluation criteria. The email text is rendered by the LLM only from the structured RFQ and passes the grounding guard, otherwise a deterministic template renders it with its label.
+
+Narrative (narrative.py): the executive summary is written by the LLM when a key exists, otherwise templated. Every numeric token must bind to a Quantity id from the run through parity.agent.grounding (2 percent relative tolerance, no whitelist of small integers or round numbers). On failure: one repair attempt, then fall back to the templated narrative with the label. Return bindings {span, quantity_id}.
+
+Agent (agent_live.py): an LLM tool loop through the gateway. Maximum 12 tool calls and a token cap. Tools are read-only over the session run: get_forecast, get_parity, rank_quotes, value_contract (evaluates a plan or quote variant using fast stages with the session draws), run_planner, build_rfq, simulate_exit. It decides the order of tools, explains trade-offs, and writes the narrative and RFQ email through the guard. It never selects numbers: every number it states comes from a tool result id. Stream each step as agent_step events (tool, arguments, a short result summary, quantity ids). If the agent fails or no key exists, the planner output stands, labelled "planner output, no LLM". Never present planner output as agent output.
+
+SELLER VIEW (seller_view.py)
+Wraps parity.seller with a reduced sweep: 100 Latin-hypercube draws over the uncertain seller parameters around the user's inputs for one (committed_share, forecast_error) pair. Returns the utilization-benefit band, the probability it is positive, and the break-even forecast error. All outputs are SIMULATED and the notice says the cost parameters are assumptions.
+
+SAMPLE MODE (sample.py)
+POST /sessions/{id}/load-sample loads a built-in sample: usage numbers, 24 prompts drawn from the verifiable archetypes (json extraction and ticket classification), and three illustrative quotes labelled ILLUSTRATIVE (not real offers). The parity stage for the sample replays stored benchmark outputs and outcomes from data/substitution/outputs.parquet through the same sequential code path, with provenance MEASURED_BENCHMARK and a notice "replayed from stored benchmark outputs; the sequential test and every downstream computation run live". Zero spend, instant. If the stored outputs are missing, the sample reports SKIPPED(no_stored_outputs) and the user must bring their own prompts. The sample must never be labelled MEASURED_LIVE.
+
+TESTS (tests/stampede/, tests/support/fake_models.py)
+- fake_models.py: SimModel (controllable per-task success probability by difficulty, deterministic token counts, deterministic outputs), SimJudge (planted sensitivity and specificity), and a FakeGateway implementing the gateway interface with budget and token accounting. All stampede tests run offline against it. Add an autouse fixture that blocks sockets.
+- test_types_provenance: every numeric leaf is a Quantity or Series.
+- test_sessions_privacy: after DELETE and after TTL expiry, sentinel strings placed in prompts, outputs, quotes and constraints appear nowhere in data/, logs or SQLite.
+- test_costs: estimator bounds actual simulated spend, caps and kill switch honored, BudgetExceeded gives partial results, BYOK key never appears in logs or responses.
+- test_sse: ordering, Last-Event-ID resume returns exactly the missed events, a disconnected client does not cancel the run.
+- test_parity_live: the live sequential path on SimModel and SimJudge matches parity.substitution.sequential decisions on identical outcome sequences.
+- test_judge_adjust: planted sens and spec recovered, J below 0.5 blocks parity decisions.
+- test_ingest: deterministic parse on the v1 formats, corrupted-format fallback with a fake LLM mapping, invariant rejection, silent-wrong-accept check (a wrong mapping that passes the format but fails the 1 percent total check is rejected).
+- test_quotes_parse: dropped fields without evidence, number-in-quote check, whitespace normalization.
+- test_quotes_rank: three hand-computed fixtures from docs/live_math.md (same-model quote, cheaper-model quote with q below 1, converted quote), plus property tests: net saving increases with discount, decreases with prepay share (given r_b above zero), decreases as q falls, decreases as deprecation probability rises, and equals zero when the discount equals the reservation discount.
+- test_sizing_live: hand-computed newsvendor cases and the salvage dependence.
+- test_whatif: no-override equals base exactly, override equals from-scratch exactly (CRN), rejected overrides, DAG touches only downstream stages (instrumented call counts), latency measured.
+- test_constraints_parse and test_planner: evidence-quote requirement, hard constraints never violated across 200 random scenarios, binding constraint reported, no-quote path.
+- test_grounding_live: untraced numbers rejected, repair attempt, templated fallback labelled.
+- test_agent_live: tool-call cap, read-only tools, injection text in notes cannot cause a tool to spend or a constraint to be violated.
+- test_sample: replay path produces provenance MEASURED_BENCHMARK and never MEASURED_LIVE.
+- test_input_sensitivity: for 20 paired sessions that differ in exactly one input (a quote's discount, the prompts' difficulty mix, the growth rate, the successor day, the risk aversion), the affected outputs move in the expected direction and unaffected outputs stay identical.
+
+LIVE GATES (evals/thresholds_live.yaml, locked before evaluation)
+L01 what-if equals full recompute, max absolute difference == 0
+L02 what-if p95 latency <= 2.0 s
+L03 provenance coverage of numeric leaves == 1.0
+L04 ungrounded numeric claims in narratives and RFQ emails across >= 30 sessions == 0
+L05 budget safety: violations of session cap across 200 fuzzed runs == 0
+L06 privacy: sentinel hits on disk and in logs after delete or TTL == 0
+L07 SSE resume exactness == 1.0
+L08 live versus offline decision equivalence on >= 40 (cell, seed) replays == 1.0
+L09 quote fixtures and property tests pass rate == 1.0
+L10 judge-adjustment 90 percent interval coverage within [0.85, 0.95] over 200 simulated workloads with planted theta, and absolute mean error <= 0.02
+L11 ingestion fallback: silent-wrong-accept rate == 0 and parse success >= 0.90 on a held-out corrupted-format set (SKIPPED(no_key) without a key; the fake-LLM version runs as a test, not as the gate)
+L12 constraint extraction: field-level F1 >= 0.90 on >= 40 natural-language paragraphs with ground truth, evidence-quote presence == 1.0, hard-constraint violation in plans == 0 (SKIPPED(no_key) without a key)
+L13 quote-email extraction: field-level F1 >= 0.85 on a held-out set of >= 30 emails with phrasing variants unseen during development, fabricated-field rate == 0 (SKIPPED(no_key) without a key)
+L14 end-to-end on fake models: all stages complete in valid event order, actual cost within 1.25x of the estimate
+L15 input sensitivity: expected-direction fraction == 1.0 on 20 paired sessions
+Each gate records id, description, value, threshold, operator, interval where applicable, status (PASS, FAIL, SKIPPED with reason, INCONCLUSIVE for CI-based gates straddling the bound). Generate the held-out sets for L11 to L13 from seeded generators with a development seed and a disjoint evaluation seed. Develop only against the development seed.
+
+eval_live.py: python eval_live.py [--fast] [--seed N] [--offline] [--only L01,...]. Writes reports/live_eval_results.json and reports/live_eval_report.md, prints a rich scorecard, exit code 1 on any FAIL, 3 on lock mismatch, always after writing outputs. Metadata includes git commit, config hashes, lock status, CPU model, seed and runtime.
+
+PHASE 8: UI WIRING (narrow, no redesign)
+Inspect web/ first and record in docs/live_api.md which files and components exist. Add one new "Live" view reusing the existing CSS tokens, palette, fonts and chart library. Do not restyle existing views. No new frameworks or build steps. Elements, each of which must be driven by API data:
+- Input panel: usage upload or three numbers, prompts textarea or "generate from description", incumbent and candidate pickers from /models, constraints textarea showing the parsed structured form for confirmation, quote email paste box showing parsed quotes (with evidence quotes on hover) for confirmation, a "Load sample" button, an Estimate button that shows the per-stage cost and a Run button that requires confirmation above the threshold.
+- Run view: stage timeline fed by SSE, the live posterior chart per candidate (posterior mean and 90 percent interval versus prompts evaluated, with the THETA0 line, which is the one chart that answers "is it safe to switch?"), an evidence drawer showing the two model outputs for a clicked prompt, a quote ranking table, a net-discount waterfall for the selected quote, the exit-recovery distribution for both mechanisms, the plan with its rejected-option reasons, the RFQ preview and copy button, the narrative with provenance badges on every number (click shows the source).
+- What-if controls: successor launch day, price cut, depth, risk aversion, conversion fraction, growth multiplier, excluded providers. Debounced calls to /whatif, showing recompute_ms and an indicator when results changed.
+- Provenance legend, notices bar, session spend meter, Delete my data button.
+- Empty, loading, error and skipped states for every panel. Every figure shows n or its interval where it has one.
+Keep the existing views and data.json behaviour working. Generate no new precomputed content for the Live view.
+
+PHASE 9 (OPTIONAL, WITH A KILL CRITERION): PARITY PRIOR
+Only if all earlier phases are done. Learn an informative Beta prior for theta from cheap workload features (token length statistics, JSON, SQL and numeric density, language) trained on the benchmark cells (parity.substitution outputs). Evaluate leave-one-archetype-out: mean prompts-to-decision and decision accuracy versus the flat Beta(1,1) prior. Ship only if prompts-to-decision drops by at least 15 percent with no loss in decision accuracy under a paired bootstrap whose CI excludes zero. Otherwise delete the code and record the negative result in DEVIATIONS.md. Do not add a gate for it.
+
+BUILD ORDER
+0. Audit, reconcile, infrastructure changes, hash-identical offline eval.
+1. types, sessions, costs, events and SSE, API skeleton, privacy and security tests, FakeGateway and fake models. Lock evals/thresholds_live.yaml now.
+2. ingest and forecast with their tests.
+3. workload, parity_live, judge_adjust, effective cost, sample replay, and their tests including L08 and L10 evaluation code.
+4. quotes_parse, quotes_rank, valuation_live, reservation prices, with fixtures and property tests.
+5. whatif with CRN, explain, sizing_live, exit_route, seller_view.
+6. constraints_parse, planner, rfq, narrative, agent_live, with their tests.
+7. eval_live.py, held-out generators, run everything offline, then run the key-dependent gates once if a key exists and spend remains under 3 USD (otherwise leave them SKIPPED(no_key)).
+8. Phase 8 UI wiring.
+9. Optional Phase 9.
+10. Run pytest, run_evals.py, eval.py --fast --offline, eval_live.py. Final message: a table generated by script from reports/live_eval_results.json (gate, value, threshold, status), every FAIL, INCONCLUSIVE and SKIPPED with its reason, every DEV entry, total spend, the p95 what-if latency and the CPU it was measured on, and a three-line manual demo script a founder can follow. Every number is copied from the JSON by script.
+
+FINAL CHECK
+Repo-wide comment search across all authored file types. Confirm the lock tests for both gate sets pass, the existing 30-gate eval artifacts are unchanged, and a session created with no inputs can still run the sample end to end offline.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-06T12:54:40+05:00.
+</ADDITIONAL_METADATA>
