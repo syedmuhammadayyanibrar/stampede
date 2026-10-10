@@ -4,7 +4,7 @@
   "passed_gates": 26,
   "failed_gates": 0,
   "skipped_gates": 4,
-  "duration_seconds": 0.0401,
+  "duration_seconds": 0.0321,
   "gates": [
     {
       "gate_id": "G01",
@@ -361,8 +361,8 @@
       "target_direction": "le",
       "threshold": 120.0,
       "unit": "seconds",
-      "value": 0.0401,
-      "observed_value": 0.0401,
+      "value": 0.0321,
+      "observed_value": 0.0321,
       "status": "PASS",
       "ci_95": null
     }

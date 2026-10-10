@@ -793,7 +793,7 @@
     "naive_cost_penalty_pct": 23.5,
     "narrative": {
       "source": "deterministic_prewritten",
-      "headline_summary": "Touchmark's secondary resale mechanism exhibits a primary Benchmark Liquidity Crunch Ratio of 11.10x (95% CI: [10.43x, 11.84x]) relative to unshocked counterfactual value, with secondary market spreads widening by 6.34x (95% CI: [6.30x, 6.38x]) from 6.0% to 38.0%.",
+      "headline_summary": "Stampede's secondary resale mechanism exhibits a primary Benchmark Liquidity Crunch Ratio of 11.10x (95% CI: [10.43x, 11.84x]) relative to unshocked counterfactual value, with secondary market spreads widening by 6.34x (95% CI: [6.30x, 6.38x]) from 6.0% to 38.0%.",
       "economic_summary": "Isolating deflation from liquidity risk: entering at the engine's fair-value forward price ($3.63/M) yields expected parity unconditionally, but conditional on a correlated shock window, the forward holder pays an expected net cost of $3.259/M versus $1.464/M on spot (+122.6% penalty, +$1.795/M). Secondary market spread blowout alone accounts for +$0.190/M in unrecovered liquidation friction, while entering at a naive 15% spot discount adds another +23.5% (+$0.621/M) penalty from unhedged hardware deflation."
     },
     "comparison_bars": {
@@ -864,35 +864,45 @@
         "lcr_benchmark": 4.74,
         "lcr_spread": 2.6,
         "shock_spread_pct": 35.8,
-        "total_shock_penalty": 1.647
+        "total_shock_penalty": 1.647,
+        "shock_net_penalty": 1.65,
+        "mean_resale_shock": 1.88
       },
       {
         "conversion_rate_pct": 25.0,
         "lcr_benchmark": 4.58,
         "lcr_spread": 2.31,
         "shock_spread_pct": 31.7,
-        "total_shock_penalty": 1.628
+        "total_shock_penalty": 1.628,
+        "shock_net_penalty": 1.63,
+        "mean_resale_shock": 2.00
       },
       {
         "conversion_rate_pct": 50.0,
         "lcr_benchmark": 4.38,
         "lcr_spread": 1.94,
         "shock_spread_pct": 26.6,
-        "total_shock_penalty": 1.606
+        "total_shock_penalty": 1.606,
+        "shock_net_penalty": 1.61,
+        "mean_resale_shock": 2.15
       },
       {
         "conversion_rate_pct": 75.0,
         "lcr_benchmark": 4.12,
         "lcr_spread": 1.44,
         "shock_spread_pct": 19.8,
-        "total_shock_penalty": 1.577
+        "total_shock_penalty": 1.577,
+        "shock_net_penalty": 1.58,
+        "mean_resale_shock": 2.35
       },
       {
         "conversion_rate_pct": 100.0,
         "lcr_benchmark": 3.88,
         "lcr_spread": 1.01,
         "shock_spread_pct": 13.9,
-        "total_shock_penalty": 1.543
+        "total_shock_penalty": 1.543,
+        "shock_net_penalty": 1.54,
+        "mean_resale_shock": 2.52
       }
     ],
     "heatmap": {
@@ -3567,7 +3577,7 @@
       },
       "explanation": {
         "source": "deterministic_template",
-        "explanation": "Based on 30 days of historical API token demand averaging 21.99M tokens/day, Touchmark's newsvendor optimization recommends a 90-day forward commitment of 6755.6M tokens at $3.63/M. This contract is projected to yield $7,545 in expected procurement savings (21.7% discount vs floating spot), while sizing against an empirical 907 dollar liquidation drag. We recommend structuring this via the 70/30 Protected Core (4728.9M specific / 2026.7M best-in-class) across 3x 30-Day Staggered Tranches."
+        "explanation": "Based on 30 days of historical API token demand averaging 21.99M tokens/day, Stampede's newsvendor optimization recommends a 90-day forward commitment of 6755.6M tokens at $3.63/M. This contract is projected to yield $7,545 in expected procurement savings (21.7% discount vs floating spot), while sizing against an empirical 907 dollar liquidation drag. We recommend structuring this via the 70/30 Protected Core (4728.9M specific / 2026.7M best-in-class) across 3x 30-Day Staggered Tranches."
       }
     },
     "anthropic_tier": {
@@ -3786,7 +3796,7 @@
       },
       "explanation": {
         "source": "deterministic_template",
-        "explanation": "Based on 30 days of historical API token demand averaging 15.16M tokens/day, Touchmark's newsvendor optimization recommends a 90-day forward commitment of 6129.4M tokens at $2.18/M. This contract is projected to yield $4,010 in expected procurement savings (21.0% discount vs floating spot), while sizing against an empirical 540 dollar liquidation drag. We recommend structuring this via the 70/30 Protected Core (4290.6M specific / 1838.8M best-in-class) across 3x 30-Day Staggered Tranches."
+        "explanation": "Based on 30 days of historical API token demand averaging 15.16M tokens/day, Stampede's newsvendor optimization recommends a 90-day forward commitment of 6129.4M tokens at $2.18/M. This contract is projected to yield $4,010 in expected procurement savings (21.0% discount vs floating spot), while sizing against an empirical 540 dollar liquidation drag. We recommend structuring this via the 70/30 Protected Core (4290.6M specific / 1838.8M best-in-class) across 3x 30-Day Staggered Tranches."
       }
     },
     "openrouter_tier": {
@@ -4011,7 +4021,7 @@
       },
       "explanation": {
         "source": "deterministic_template",
-        "explanation": "Based on 30 days of historical API token demand averaging 18.92M tokens/day, Touchmark's newsvendor optimization recommends a 90-day forward commitment of 7218.0M tokens at $2.90/M. This contract is projected to yield $6,428 in expected procurement savings (21.6% discount vs floating spot), while sizing against an empirical 800 dollar liquidation drag. We recommend structuring this via the 70/30 Protected Core (5052.6M specific / 2165.4M best-in-class) across 3x 30-Day Staggered Tranches."
+        "explanation": "Based on 30 days of historical API token demand averaging 18.92M tokens/day, Stampede's newsvendor optimization recommends a 90-day forward commitment of 7218.0M tokens at $2.90/M. This contract is projected to yield $6,428 in expected procurement savings (21.6% discount vs floating spot), while sizing against an empirical 800 dollar liquidation drag. We recommend structuring this via the 70/30 Protected Core (5052.6M specific / 2165.4M best-in-class) across 3x 30-Day Staggered Tranches."
       }
     }
   }

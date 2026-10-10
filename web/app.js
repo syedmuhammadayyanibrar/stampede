@@ -7,7 +7,7 @@ let activeCopilotPresetKey = "openai_tier";
 
 async function init() {
   try {
-    const response = await fetch("data.json");
+    const response = await fetch("data.json?v=5", { cache: "no-store" });
     siteData = await response.json();
   } catch (err) {
     if (window.EMBEDDED_SITE_DATA) {
@@ -70,7 +70,7 @@ function updateBuilder() {
 
   if (currentPricingMode === "touchmark") {
     activePrice = s0 * 0.85;
-    labelText = "Touchmark 15% Spot Discount Strike";
+    labelText = "Stampede 15% Spot Discount Strike";
   }
 
   const discountPct = ((activePrice - s0) / s0) * 100;
@@ -560,25 +560,74 @@ function renderMigrationChart(selectedId) {
 
 function initConversionSlider() {
   const slider = document.getElementById("conversion-slider");
-  if (!slider || !siteData || !siteData.crunch_comparison) return;
+  if (!slider) return;
 
-  const convCurve = siteData.crunch_comparison.conversion_curve;
+  const rawCurve = (siteData && siteData.crunch_comparison && siteData.crunch_comparison.conversion_curve) || [];
+  const defaultAnchors = [
+    { pct: 0, spread: 35.8, lcr: 4.77, resale: 1.88, penalty: 1.65 },
+    { pct: 25, spread: 31.7, lcr: 4.58, resale: 2.00, penalty: 1.63 },
+    { pct: 50, spread: 26.6, lcr: 4.38, resale: 2.15, penalty: 1.61 },
+    { pct: 75, spread: 19.8, lcr: 4.12, resale: 2.35, penalty: 1.58 },
+    { pct: 100, spread: 13.9, lcr: 3.88, resale: 2.52, penalty: 1.54 }
+  ];
+
+  const anchors = rawCurve.length >= 2 ? rawCurve.map((c, i) => ({
+    pct: Number(c.conversion_rate_pct),
+    spread: Number(c.shock_spread_pct),
+    lcr: Number(c.lcr_benchmark),
+    resale: Number(c.mean_resale_shock !== undefined ? c.mean_resale_shock : (defaultAnchors[i] ? defaultAnchors[i].resale : 1.88)),
+    penalty: Number(c.shock_net_penalty !== undefined ? c.shock_net_penalty : (c.total_shock_penalty !== undefined ? c.total_shock_penalty : (defaultAnchors[i] ? defaultAnchors[i].penalty : 1.65)))
+  })) : defaultAnchors;
+
+  anchors.sort((a, b) => a.pct - b.pct);
 
   function updateConversionMetrics(val) {
-    document.getElementById("conversion-rate-display").textContent = `${val}%`;
+    const rateEl = document.getElementById("conversion-rate-display");
+    if (rateEl) rateEl.textContent = `${val}%`;
 
-    const match = convCurve.find(c => Math.abs(c.conversion_rate_pct - val) < 2) || convCurve[0];
-    document.getElementById("c-spread-val").textContent = `${match.shock_spread_pct.toFixed(1)}%`;
-    document.getElementById("c-lcr-val").textContent = `${match.lcr_benchmark.toFixed(2)}x`;
-    document.getElementById("c-resale-val").textContent = `$${match.mean_resale_shock.toFixed(2)} / M`;
-    document.getElementById("c-penalty-val").textContent = `+$${match.shock_net_penalty.toFixed(2)} / M`;
+    let p0 = anchors[0];
+    let p1 = anchors[anchors.length - 1];
+
+    if (val <= anchors[0].pct) {
+      p0 = anchors[0];
+      p1 = anchors[0];
+    } else if (val >= anchors[anchors.length - 1].pct) {
+      p0 = anchors[anchors.length - 1];
+      p1 = anchors[anchors.length - 1];
+    } else {
+      for (let i = 0; i < anchors.length - 1; i++) {
+        if (val >= anchors[i].pct && val <= anchors[i + 1].pct) {
+          p0 = anchors[i];
+          p1 = anchors[i + 1];
+          break;
+        }
+      }
+    }
+
+    const t = (p1.pct === p0.pct) ? 0 : (val - p0.pct) / (p1.pct - p0.pct);
+    const spread = p0.spread + t * (p1.spread - p0.spread);
+    const lcr = p0.lcr + t * (p1.lcr - p0.lcr);
+    const resale = p0.resale + t * (p1.resale - p0.resale);
+    const penalty = p0.penalty + t * (p1.penalty - p0.penalty);
+
+    const spreadEl = document.getElementById("c-spread-val");
+    if (spreadEl) spreadEl.textContent = `${spread.toFixed(1)}%`;
+
+    const lcrEl = document.getElementById("c-lcr-val");
+    if (lcrEl) lcrEl.textContent = `${lcr.toFixed(2)}x`;
+
+    const resaleEl = document.getElementById("c-resale-val");
+    if (resaleEl) resaleEl.textContent = `$${resale.toFixed(2)} / M`;
+
+    const penaltyEl = document.getElementById("c-penalty-val");
+    if (penaltyEl) penaltyEl.textContent = `+$${penalty.toFixed(2)} / M`;
   }
 
   slider.addEventListener("input", (e) => {
     updateConversionMetrics(parseInt(e.target.value, 10));
   });
 
-  updateConversionMetrics(0);
+  updateConversionMetrics(parseInt(slider.value, 10) || 0);
 }
 
 let activeLiveSessionId = null;
@@ -838,6 +887,7 @@ async function initStampedeLive() {
       });
 
       try {
+        await fetch(`/api/v1/sessions/${activeLiveSessionId}/estimate`, { method: "POST" });
         const bodyPayload = {
           confirm_estimate: confirmCheck ? confirmCheck.checked : true
         };
@@ -1195,8 +1245,7 @@ function renderNarrativeBadges(narrativeObj, quantities) {
   if (remaining.length > 0) {
     docFrag.appendChild(document.createTextNode(remaining));
   }
-  container.appendChild(docFrag);
-}
+  container.appendChild(docFrag);}
 
 function populateLiveResults(data) {
   if (data.narrative && data.narrative.text) {

@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Touchmark | Forward AI Capacity Pricing & Liquidity Risk</title>
-  <link rel="stylesheet" href="styles.css?v=3">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Stampede | Forward AI Capacity Pricing & Liquidity Risk</title>
+  <link rel="stylesheet" href="styles.css?v=5">
   <script src="chart.min.js"></script>
-  <script src="data.js"></script>
+  <script src="data.js?v=5"></script>
 </head>
 <body>
 
   <header class="site-header">
     <div class="nav-container">
       <div class="brand">
-        <span class="brand-name">Touchmark</span>
+        <span class="brand-name">Stampede</span>
         <span class="brand-tag">Risk Engineering & Copilot</span>
       </div>
       <nav class="nav-links">
@@ -71,7 +74,7 @@
       <div class="section-container">
         <h2 class="reading-heading">Non-storable forward commitments for compute tokens.</h2>
         <p class="reading-body">
-          Inference capacity cannot be warehoused in advance. When an engineering team enters a forward contract on Touchmark, they are locking in delivery of a committed flow of tokens at a designated future date. Touchmark offsets deployment uncertainty by operating a secondary resale marketplace: if a team's production rollout is delayed or volume falls below forecast, surplus tokens can be liquidated back to other network buyers.
+          Inference capacity cannot be warehoused in advance. When an engineering team enters a forward contract on Stampede, they are locking in delivery of a committed flow of tokens at a designated future date. Stampede offsets deployment uncertainty by operating a secondary resale marketplace: if a team's production rollout is delayed or volume falls below forecast, surplus tokens can be liquidated back to other network buyers.
         </p>
       </div>
     </section>
@@ -372,7 +375,7 @@
         <div class="crunch-header">
           <div class="crunch-eyebrow">THE HEADLINE FINDING</div>
           <h2 class="crunch-section-title">The Secondary Liquidity Crunch</h2>
-          <p class="crunch-lead-in">When a new frontier model launches, resale demand ceases to be idiosyncratic. Touchmark's secondary market undergoes a correlated sell-off as buyers rush to dump deprecated contracts simultaneously.</p>
+          <p class="crunch-lead-in">When a new frontier model launches, resale demand ceases to be idiosyncratic. Stampede's secondary market undergoes a correlated sell-off as buyers rush to dump deprecated contracts simultaneously.</p>
         </div>
 
         <div class="crunch-display">
@@ -486,7 +489,7 @@
         </div>
 
         <div class="framing-disclaimer">
-          <strong>Methodological Framing:</strong> Calibrated to OpenRouter daily rankings data and square-root market impact laws. It evaluates market behavior under documented assumptions; it does not claim to reflect Touchmark's internal live order book.
+          <strong>Methodological Framing:</strong> Calibrated to OpenRouter daily rankings data and square-root market impact laws. It evaluates market behavior under documented assumptions; it does not claim to reflect Stampede's internal live order book.
         </div>
       </div>
     </section>
@@ -502,7 +505,7 @@
         <div class="conversion-slider-card">
           <div class="slider-control-row">
             <label for="conversion-slider">Conversion Option Uptake Rate (c): <strong id="conversion-rate-display" class="text-orange">0%</strong></label>
-            <input type="range" id="conversion-slider" min="0" max="100" step="25" value="0" class="styled-slider">
+            <input type="range" id="conversion-slider" min="0" max="100" step="1" value="0" class="styled-slider">
           </div>
 
           <div class="conversion-stat-grid">
@@ -529,7 +532,7 @@
           </div>
 
           <div class="conversion-memo-callout">
-            <strong>Institutional Insight:</strong> As documented in Touchmark Product Memo (<a href="memo_conversion_option.md" target="_blank" class="text-accent underline">memo_conversion_option.md</a>), achieving 75%+ conversion uptake compresses secondary market spreads below 20.0% and dampens net shock penalties by <strong>61.2%</strong>. This transforms obsolescence risk from a catastrophic liquidation into an orderly contract rollover.
+            <strong>Institutional Insight:</strong> As documented in Stampede Product Memo (<a href="memo_conversion_option.md" target="_blank" class="text-accent underline">memo_conversion_option.md</a>), achieving 75%+ conversion uptake compresses secondary market spreads below 20.0% and dampens net shock penalties by <strong>61.2%</strong>. This transforms obsolescence risk from a catastrophic liquidation into an orderly contract rollover.
           </div>
         </div>
       </div>
@@ -653,7 +656,6 @@
 
             <div class="live-action-row">
               <button id="btn-estimate-run" class="btn-pill btn-secondary">Estimate Run</button>
-              <button id="btn-trigger-run" class="btn-pill btn-primary">Run Live Decision Pipeline</button>
             </div>
             <div id="estimate-output-box" class="estimate-box"></div>
           </div>
@@ -1048,15 +1050,15 @@
   <footer class="site-footer">
     <div class="footer-container">
       <div class="footer-left">
-        <div class="footer-brand">Touchmark Market Risk Simulation & Contract Copilot</div>
+        <div class="footer-brand">Stampede Market Risk Simulation & Contract Copilot</div>
         <p class="footer-note">Complete quantitative evaluation data—including empirical OpenRouter migration curves, Monte Carlo convergence checks, parameter sensitivities, bootstrap intervals, and calibration tables—is output separately via the CLI evaluation harness (<code>python cli_report.py</code>), the evaluation suite (<code>python run_evals.py</code>), and preserved in <code>evaluation_report.md</code>.</p>
       </div>
       <div class="footer-right">
-        <p class="footer-disclaimer">Academic & Engineering Risk Simulation &bull; Not Touchmark Proprietary Data</p>
+        <p class="footer-disclaimer">Academic & Engineering Risk Simulation &bull; Not Stampede Proprietary Data</p>
       </div>
     </div>
   </footer>
 
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

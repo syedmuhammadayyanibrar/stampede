@@ -1,12 +1,12 @@
 # Parity Quantitative Evaluation Report
 
-- **Timestamp**: 2026-10-08 11:44:27 UTC
+- **Timestamp**: 2026-10-10 13:08:57 UTC
 - **Total Gates**: 30
 - **Passed**: 26
 - **Failed**: 0
 - **Skipped**: 4
 - **Inconclusive**: 0
-- **Runtime**: 0.04 seconds
+- **Runtime**: 0.03 seconds
 
 ## Scorecard
 
@@ -41,4 +41,4 @@
 | G27 | `explanation_grounding_accuracy` | >= | 1.0 binary | 1.0 binary | **PASS** |
 | G28 | `corrupted_csv_header_repair_rate` | >= | 0.9 rate | 1.0 rate | **PASS** |
 | G29 | `corrupted_csv_row_recovery_rate` | >= | 0.85 rate | 1.0 rate | **PASS** |
-| G30 | `pipeline_offline_latency_seconds` | <= | 120.0 seconds | 0.0401 seconds | **PASS** |
+| G30 | `pipeline_offline_latency_seconds` | <= | 120.0 seconds | 0.0321 seconds | **PASS** |

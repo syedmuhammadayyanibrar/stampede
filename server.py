@@ -22,6 +22,14 @@ from stampede.stages.seller_view import compute_seller_uplift
 app = FastAPI(title="Stampede Risk Engine & Contract API")
 app.include_router(stampede_router, prefix="/api/v1")
 
+@app.middleware("http")
+async def add_no_cache_headers(request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
 class ParseRequest(BaseModel):
     csv_content: str
 
