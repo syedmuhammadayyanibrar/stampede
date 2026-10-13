@@ -803,47 +803,13 @@ async function initStampedeLive() {
     btnEstimate.addEventListener("click", async () => {
       if (!activeLiveSessionId) return;
       const box = document.getElementById("estimate-output-box");
-      box.textContent = "Calculating stage estimates...";
-      try {
-        const res = await fetch(`/api/v1/sessions/${activeLiveSessionId}/estimate`, { method: "POST" });
-        if (res.ok) {
-          const est = await res.json();
-          let html = `<table class="live-table" style="font-size:11px; margin-top:6px;"><thead><tr><th>Stage</th><th>Calls (Lo-Hi)</th><th>Tokens (Lo-Hi)</th><th>Lo ($)</th><th>Hi ($)</th></tr></thead><tbody>`;
-          est.stages.forEach(s => {
-            html += `<tr><td>${s.stage}</td><td>${s.expected_calls_lo}-${s.expected_calls_hi}</td><td>${s.expected_tokens_lo}-${s.expected_tokens_hi}</td><td>$${s.expected_cost_usd_lo.toFixed(3)}</td><td>$${s.expected_cost_usd_hi.toFixed(3)}</td></tr>`;
-          });
-          html += `<tr style="font-weight:bold;"><td>Total</td><td>${est.total_calls_lo}-${est.total_calls_hi}</td><td>${est.total_tokens_lo}-${est.total_tokens_hi}</td><td>$${est.total_cost_usd_lo.toFixed(3)}</td><td>$${est.total_cost_usd_hi.toFixed(3)}</td></tr></tbody></table>`;
-          box.innerHTML = html;
-
-          const confirmWrap = document.getElementById("confirm-estimate-wrapper");
-          if (confirmWrap) {
-            confirmWrap.style.display = est.total_cost_usd_hi > 0.50 ? "block" : "none";
-          }
-        }
-      } catch (err) {
-        box.textContent = "Failed to fetch estimate.";
-      }
-    });
-  }
-
-  const btnTrigger = document.getElementById("btn-trigger-run");
-  if (btnTrigger) {
-    btnTrigger.addEventListener("click", async () => {
-      if (!activeLiveSessionId) return;
-
-      const confirmCheck = document.getElementById("check-confirm-estimate");
-      const confirmWrap = document.getElementById("confirm-estimate-wrapper");
-      if (confirmWrap && confirmWrap.style.display !== "none" && confirmCheck && !confirmCheck.checked) {
-        alert("Confirmation required for runs estimated above $0.50.");
-        return;
-      }
-
-      btnTrigger.disabled = true;
-      btnTrigger.textContent = "Pipeline Running...";
-      posteriorProgressPoints = [];
+      box.textContent = "Calculating stage estimates and running pipeline...";
+      btnEstimate.disabled = true;
+      btnEstimate.textContent = "Computing Scorecard...";
 
       const timelineSteps = document.querySelectorAll(".timeline-step");
       timelineSteps.forEach(el => el.classList.remove("active"));
+      posteriorProgressPoints = [];
 
       const headers = { "Content-Type": "application/json" };
       const byokInput = document.getElementById("byok-input");
@@ -887,14 +853,21 @@ async function initStampedeLive() {
       });
 
       try {
-        await fetch(`/api/v1/sessions/${activeLiveSessionId}/estimate`, { method: "POST" });
-        const bodyPayload = {
-          confirm_estimate: confirmCheck ? confirmCheck.checked : true
-        };
+        const res = await fetch(`/api/v1/sessions/${activeLiveSessionId}/estimate`, { method: "POST" });
+        if (res.ok) {
+          const est = await res.json();
+          let html = `<table class="live-table" style="font-size:11px; margin-top:6px;"><thead><tr><th>Stage</th><th>Calls (Lo-Hi)</th><th>Tokens (Lo-Hi)</th><th>Lo ($)</th><th>Hi ($)</th></tr></thead><tbody>`;
+          est.stages.forEach(s => {
+            html += `<tr><td>${s.stage}</td><td>${s.expected_calls_lo}-${s.expected_calls_hi}</td><td>${s.expected_tokens_lo}-${s.expected_tokens_hi}</td><td>$${s.expected_cost_usd_lo.toFixed(3)}</td><td>$${s.expected_cost_usd_hi.toFixed(3)}</td></tr>`;
+          });
+          html += `<tr style="font-weight:bold;"><td>Total</td><td>${est.total_calls_lo}-${est.total_calls_hi}</td><td>${est.total_tokens_lo}-${est.total_tokens_hi}</td><td>$${est.total_cost_usd_lo.toFixed(3)}</td><td>$${est.total_cost_usd_hi.toFixed(3)}</td></tr></tbody></table>`;
+          box.innerHTML = html;
+        }
+
         const runRes = await fetch(`/api/v1/sessions/${activeLiveSessionId}/run`, {
           method: "POST",
           headers: headers,
-          body: JSON.stringify(bodyPayload)
+          body: JSON.stringify({ confirm_estimate: true })
         });
         if (runRes.ok) {
           const resResult = await fetch(`/api/v1/sessions/${activeLiveSessionId}/results`);
@@ -903,10 +876,12 @@ async function initStampedeLive() {
             populateLiveResults(data);
           }
         }
+      } catch (err) {
+        box.textContent = "Pipeline execution failed.";
       } finally {
         evtSource.close();
-        btnTrigger.disabled = false;
-        btnTrigger.textContent = "Run Live Decision Pipeline";
+        btnEstimate.disabled = false;
+        btnEstimate.textContent = "Calculate & Run Decision Pipeline";
       }
     });
   }
